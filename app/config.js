@@ -152,8 +152,9 @@ module.exports = {
         {
           title:"Related Sites",
           links:[
-            {name: "Bitcoin Unlimited", url:"https://bitcoinunlimited.info", imgUrl:"/img/logo/bitcoin-unlimited-green.png"},
-            {name: "Bitcoin Cash Nodes", url:"https://cashnodes.io", imgUrl:"/img/logo/bitcoin-cash-nodes.png"},
+            // TODO: find better images for this URLs, in the mean time use bch.svg
+            {name: "Bitcoin Unlimited", url:"https://bitcoinunlimited.info", imgUrl:"/img/logo/bch.svg"},
+            {name: "Bitcoin Cash Nodes", url:"https://cashnodes.io", imgUrl:"/img/logo/bch.svg"},
           ]
         }
       ]
