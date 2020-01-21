@@ -198,8 +198,8 @@ block content
                       div(class="summary-split-table-content monospace") #{electrumScripthash}
 
                   - var x = result.validateaddress;
-                  - var flagNames = ["Is Valid?", "Is Script?", "Is Witness?", "Is Mine?", "Is Watch-Only?"];
-                  - var flags = [x.isvalid, x.isscript, x.iswitness, x.ismine, x.iswatchonly];
+                  - var flagNames = ["Is Valid?", "Is Script?", "Is Mine?", "Is Watch-Only?"];
+                  - var flags = [x.isvalid, x.isscript, x.ismine, x.iswatchonly];
 
                   each flagName, index in flagNames
                     div(class="row")
@@ -221,13 +221,12 @@ block content
                       tr
                         th Is Valid?
                         th Is Script?
-                        th Is Witness?
                         th Is Mine?
                         th Is Watch-Only?
                     tbody
                       tr
                         - var x = result.validateaddress;
-                        - var flags = [x.isvalid, x.isscript, x.iswitness, x.ismine, x.iswatchonly];
+                        - var flags = [x.isvalid, x.isscript, x.ismine, x.iswatchonly];
 
                         each flag in flags
                           td
