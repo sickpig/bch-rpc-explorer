@@ -9,6 +9,7 @@ var moment = require('moment');
 var bitcoinCore = require("bitcoin-core");
 var qrcode = require('qrcode');
 var bitcoinjs = require('bitcoinjs-lib');
+var cashaddrjs = require('cashaddrjs');
 var sha256 = require("crypto-js/sha256");
 var hexEnc = require("crypto-js/enc-hex");
 var Decimal = require("decimal.js");
@@ -672,6 +673,12 @@ router.get("/address/:address", function(req, res, next) {
 
     } catch (err2) {
       res.locals.pageErrors.push(utils.logError("u02qg02yqge", err));
+      try {
+        res.locals.addressObj = cashaddrjs.decode(address);
+        res.locals.addressObj["isCashAddr"]=true;
+      } catch(err3) {
+        res.locals.pageErrors.push(utils.logError("address parsing error", err3));
+      }
     }
   }
 
