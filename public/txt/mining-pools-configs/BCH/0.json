@@ -1,5 +1,17 @@
 {
     "coinbase_tags" : {
+        "SBICrypto": {
+            "name": "SBI Crypto pool",
+            "link": "https://www.sbicrypto.com/en/"
+        },
+        "Mining-Dutch": {
+            "name": "Mining Dutch pool",
+            "link": "https://www.mining-dutch.nl/"
+        },
+        "MAGIC": {
+            "name": "Crypto Magic pool",
+            "link": "Uknown"
+        },
         "http://toom.im -- P2pool": {
             "name": "Toomim p2pool",
             "link": "http://github.com/jtoomim/p2pool"
@@ -28,9 +40,9 @@
             "name": "Toomim Bros",
             "link": "https://toom.im"
         },
-        "Mined by AntPool59": {
+        "AntPool": {
             "name": "AntPool",
-            "link": "https://"
+            "link": "https://antopool.com"
         },
         "/LUXOR/": {
             "name": "Luxor",
