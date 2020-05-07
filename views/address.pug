@@ -176,7 +176,7 @@ block content
 
                   if (addressDetails && addressDetails.txCount)
                     div.row
-                      div.summary-split-table-label"
+                      div.summary-split-table-label
                       div.summary-split-table-content.text-monospace #{addressDetails.txCount.toLocaleString()}
 
                   div.row
@@ -300,6 +300,7 @@ block content
 
                     else if (err == "No address API configured")
                       span No address API is configured. See
+                      | 
                       a(href="https://github.com/sickpig/bch-rpc-explorer/blob/master/.env-sample") the example configuration file
                       span  for help setting up an address API if desired.
 
@@ -318,7 +319,7 @@ block content
                           span ##{(offset + txIndex + 1).toLocaleString()}
                         span  &ndash;
 
-                      div.row
+                     div.row
                         div.col-md-8
                           if (tx && tx.txid)
                             a(href=("/tx/" + tx.txid)) #{tx.txid}
@@ -328,7 +329,7 @@ block content
                               a(data-toggle="tooltip", title=(coinConfig.name + " Fun! See transaction for details"))
                                 i.fas.fa-certificate.text-primary
 
-                        br
+                          br
                           if (addrGainsByTx[tx.txid])
                             - var currencyValue = addrGainsByTx[tx.txid];
                             span(class="text-success") +
@@ -342,21 +343,21 @@ block content
                             span(class="text-danger") -
                               include includes/value-display.pug
 
-												div.col-md-4
-													div.text-md-right
-														if (tx.time)
-															- var timestampHuman = tx.time;
-															include includes/timestamp-human.pug
+                        div.col-md-4
+                           div.text-md-right
+                                   if (tx.time)
+                                           - var timestampHuman = tx.time;
+                                           include includes/timestamp-human.pug
 
-															br
+                                           br
 
-															- var timeAgoTime = tx.time;
-															small.text-muted (
-																include includes/time-ago-text.pug
-																span )
+                                           - var timeAgoTime = tx.time;
+                                           small.text-muted (
+                                                   include includes/time-ago-text.pug
+                                                   span )
 
-														else
-															span.text-danger Unconfirmed
+                                   else
+                                           span.text-danger Unconfirmed
 
                     div.card-body
                       if (true)
