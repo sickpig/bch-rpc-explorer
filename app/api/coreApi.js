@@ -259,6 +259,18 @@ function getBlockStats(hash) {
 	});
 }
 
+function decodeScript(hex) {
+	return tryCacheThenRpcApi(miscCache, "decodeScript-" + hex, 1000 * 60 * 1000, function() {
+		return rpcApi.decodeScript(hex);
+	});
+}
+
+function decodeRawTransaction(hex) {
+	return tryCacheThenRpcApi(miscCache, "decodeRawTransaction-" + hex, 1000 * 60 * 1000, function() {
+		return rpcApi.decodeRawTransaction(hex);
+	});
+}
+
 function getBlockStatsByHeight(height) {
 	return tryCacheThenRpcApi(miscCache, "getBlockStatsByHeight-" + height, ONE_YR, function() {
 		return rpcApi.getBlockStatsByHeight(height);
@@ -1012,5 +1024,7 @@ module.exports = {
 	getBlocksStatsByHeight: getBlocksStatsByHeight,
 	buildBlockAnalysisData: buildBlockAnalysisData,
 	getBlockHeaderByHeight: getBlockHeaderByHeight,
-	getBlockHeadersByHeight: getBlockHeadersByHeight
+	getBlockHeadersByHeight: getBlockHeadersByHeight,
+	decodeScript: decodeScript,
+	decodeRawTransaction: decodeRawTransaction
 };

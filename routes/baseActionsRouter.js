@@ -488,6 +488,67 @@ router.get("/block-stats", function(req, res, next) {
 	});
 });
 
+router.get("/decoder", function(req, res, next) {
+	res.locals.decodedScript = "";
+	res.locals.tx = undefined;
+	res.locals.type = "script";
+	res.render("decoder");
+	next();
+});
+
+router.post("/decoder", function(req, res, next) {
+	if (!req.body.query) {
+	req.session.userMessage = "Enter a hex-encoded transaction or script";
+	res.redirect("/decoder");
+	return;
+	}
+
+	var promises = [];
+	// Clean up the input in a variety of ways that a cut-paste might have
+	var input = req.body.query.trim();
+	while (input[0] == '"' || input[0] == "'") {
+		input = input.slice(1);
+	}
+	while ((input.length > 0) && ( input[input.length-1] == '"' || input[input.length-1] == "'")) {
+		input = input.slice(0,input.length-1);
+	}
+	if (input.slice(0,2) == "0x") input = input.slice(2);
+	promises.push(coreApi.decodeScript(input));
+	promises.push(coreApi.decodeRawTransaction(input));
+
+	Promise.all(promises).then(function(promiseResults) {
+		decodedScript = promiseResults[0];
+		decodedTx = promiseResults[1];
+
+		res.locals.decodedScript = "";
+		res.locals.tx = " ";
+
+		if ("message" in decodedTx) {
+			res.locals.userMessage = decodedTx.message;
+			if ("message" in decodedScript) {
+				res.locals.userMessage += "\n" + decodedScript.message;
+			}
+			else
+			{
+				res.locals.type = "script";
+				res.locals.userMessage = "";
+				res.locals.decodedDetails = utils.prettyScript(decodedScript.asm, 2);
+				res.locals.decodedJson = decodedScript;
+			}
+		}
+		else
+		{
+			res.locals.type = "tx";
+			res.locals.userMessage = "";
+			res.locals.tx = decodedTx;
+			res.locals.decodedJson = decodedTx;  // If tx decodes, assume its a tx because tx hex can be decoded as bad scripts
+		}
+
+	res.render("decoder");
+	next();
+	});
+});
+
 router.get("/search", function(req, res, next) {
 	res.render("search");
 

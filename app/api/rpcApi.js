@@ -102,6 +102,15 @@ function getBlockStatsByHeight(height) {
 	}
 }
 
+function decodeScript(hex) {
+	return getRpcDataWithParams({method:"decodescript", parameters:[hex]});
+}
+
+function decodeRawTransaction(hex) {
+	return getRpcDataWithParams({method:"decoderawtransaction", parameters:[hex]});
+}
+
+
 function getUtxoSetSummary() {
 	return getRpcData("gettxoutsetinfo");
 }
@@ -506,6 +515,8 @@ module.exports = {
 	getBlockStatsByHeight: getBlockStatsByHeight,
 	getBlockHeaderByHash: getBlockHeaderByHash,
 	getBlockHeaderByHeight: getBlockHeaderByHeight,
+	decodeScript: decodeScript,
+	decodeRawTransaction: decodeRawTransaction,
 
 	minRpcVersions: minRpcVersions
 };

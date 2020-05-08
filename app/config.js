@@ -56,7 +56,8 @@ var siteToolsAux = '[ \
   {"name":"Mining Summary", "url":"/mining-summary", "desc":"Summary of recent data about miners.", "fontawesome":"fas fa-chart-pie"}, \
   {"name":"Block Stats", "url":"/block-stats", "desc":"Summary data for blocks in configurable range.", "fontawesome":"fas fa-layer-group"} ,\
   {"name":"Block Analysis", "url":"/block-analysis", "desc":"Summary analysis for all transactions in a block.", "fontawesome":"fas fa-angle-double-down"}, \
-  {"name":"Difficulty History", "url":"/difficulty-history", "desc":"Graph of difficulty changes over time.", "fontawesome":"fas fa-chart-line"} \
+  {"name":"Difficulty History", "url":"/difficulty-history", "desc":"Graph of difficulty changes over time.", "fontawesome":"fas fa-chart-line"}, \
+  {"name":"Decoder", "url":"/decoder", "desc":"Transaction/script decoder.", "fontawesome":"fas fa-chart-pie"} \
 ]'
 
 var siteToolsJSON = JSON.parse(siteToolsAux)
@@ -190,7 +191,7 @@ module.exports = {
       ]
     },
     subHeaderToolsList:[0, 1, 4, 7, 8, 9], // indexes in "siteTools" below that are shown in the site "sub menu" (visible on all pages except homepage)
-    prioritizedToolIdsList: [0, 1, 4, 7, 8, 9, 3, 2, 5, 10, 6],
+    prioritizedToolIdsList: [0, 1, 4, 7, 8, 9, 3, 2, 5, 10, 11, 6],
   },
 
   credentials: credentials,
