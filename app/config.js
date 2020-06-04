@@ -57,7 +57,7 @@ var siteToolsAux = '[ \
   {"name":"Block Stats", "url":"/block-stats", "desc":"Summary data for blocks in configurable range.", "fontawesome":"fas fa-layer-group"} ,\
   {"name":"Block Analysis", "url":"/block-analysis", "desc":"Summary analysis for all transactions in a block.", "fontawesome":"fas fa-angle-double-down"}, \
   {"name":"Difficulty History", "url":"/difficulty-history", "desc":"Graph of difficulty changes over time.", "fontawesome":"fas fa-chart-line"}, \
-  {"name":"Decoder", "url":"/decoder", "desc":"Transaction/script decoder.", "fontawesome":"fas fa-chart-pie"} \
+  {"name":"Decoder", "url":"/decoder", "desc":"Transaction/script decoder.", "fontawesome":"fas fa-flask"} \
 ]'
 
 var siteToolsJSON = JSON.parse(siteToolsAux)
