@@ -496,6 +496,27 @@ router.get("/decoder", function(req, res, next) {
 	next();
 });
 
+allSettled = function(promiseList) {
+    let results = new Array(promiseList.length);
+
+    return new Promise((ok, rej) => {
+
+        let fillAndCheck = function(i) {
+            return function(ret) {
+                results[i] = ret;
+                for(let j = 0; j < results.length; j++) {
+                    if (results[j] == null) return;
+                }
+                ok(results);
+            }
+        };
+
+        for(let i=0;i<promiseList.length;i++) {
+            promiseList[i].then(fillAndCheck(i), fillAndCheck(i));
+        }
+    });
+}
+
 router.post("/decoder", function(req, res, next) {
 	if (!req.body.query) {
 	req.session.userMessage = "Enter a hex-encoded transaction or script";
@@ -516,36 +537,29 @@ router.post("/decoder", function(req, res, next) {
 	promises.push(coreApi.decodeScript(input));
 	promises.push(coreApi.decodeRawTransaction(input));
 
-	Promise.all(promises).then(function(promiseResults) {
+	allSettled(promises).then(function(promiseResults) {
 		decodedScript = promiseResults[0];
 		decodedTx = promiseResults[1];
-
 		res.locals.decodedScript = "";
 		res.locals.tx = " ";
-
-		if ("message" in decodedTx) {
-			res.locals.userMessage = decodedTx.message;
-			if ("message" in decodedScript) {
-				res.locals.userMessage += "\n" + decodedScript.message;
-			}
-			else
-			{
-				res.locals.type = "script";
-				res.locals.userMessage = "";
-				res.locals.decodedDetails = utils.prettyScript(decodedScript.asm, 2);
-				res.locals.decodedJson = decodedScript;
-			}
-		}
-		else
-		{
+		if ("txid" in decodedTx) {
 			res.locals.type = "tx";
 			res.locals.userMessage = "";
 			res.locals.tx = decodedTx;
 			res.locals.decodedJson = decodedTx;  // If tx decodes, assume its a tx because tx hex can be decoded as bad scripts
+		} else if ("asm" in decodedScript) {
+			res.locals.type = "script";
+			res.locals.userMessage = "";
+			res.locals.decodedDetails = utils.prettyScript(decodedScript.asm, 2);
+			res.locals.decodedJson = decodedScript;
+		} else {
+			res.locals.type = "unknown";
+			res.locals.userMessage = "Decode failed";
+			res.locals.tx = {};
+			res.locals.decodedJson = {};
 		}
-
-	res.render("decoder");
-	next();
+		res.render("decoder");
+		next();
 	});
 });
 

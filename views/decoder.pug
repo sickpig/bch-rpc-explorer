@@ -12,8 +12,9 @@ block content
                         input(type="hidden", name="_csrf", value=csrfToken)
                         div(class="input-group input-group-lg")
                                 textarea(class="form-control form-control-sm", name="query", placeholder="hex data", rows="6", value=(query), style="width: 90%;")
-                                div(class="input-group-append")
-                                        button(type="submit", class="btn btn-primary") Decode
+                        br
+                        div(class="input-group-append")
+                                button(type="submit", class="btn btn-primary") Decode
         ul.nav.nav-tabs.mb-3
           li.nav-item
             a.nav-link.active(data-toggle="tab", href="#tab-details", role="tab") Details
@@ -24,7 +25,7 @@ block content
             div(id="tab-details", class="tab-pane active", role="tabpanel")
                 if type === "script"           
                     div(class="mb-5") !{decodedDetails}
-                else
+                else if type === "tx"
                     if (tx.vin[0].coinbase)
                       div.card.shadow-sm.mb-3
                         div.card-body.px-2.px-md-3
