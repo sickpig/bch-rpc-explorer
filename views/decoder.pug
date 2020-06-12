@@ -1,68 +1,68 @@
 extends layout
 
 block headContent
-        title Decode
+	title Decode
 
 block content
-        h1.h3 Decode Transactions or Scripts
-        hr
+	h1.h3 Decode Transactions or Scripts
+	hr
 
-        div(class="mb-5")
-                form(method="post", action="/decoder", class="form")
-                        input(type="hidden", name="_csrf", value=csrfToken)
-                        div(class="input-group input-group-lg")
-                                textarea(class="form-control form-control-sm", name="query", placeholder="hex data", rows="6", value=(query), style="width: 90%;")
-                        br
-                        div(class="input-group-append")
-                                button(type="submit", class="btn btn-primary") Decode
-        ul.nav.nav-tabs.mb-3
-          li.nav-item
-            a.nav-link.active(data-toggle="tab", href="#tab-details", role="tab") Details
-          li.nav-item
-            a.nav-link(data-toggle="tab", href="#tab-json", role="tab") JSON
+	div(class="mb-5")
+	form(method="post", action="/decoder", class="form")
+		input(type="hidden", name="_csrf", value=csrfToken)
+		div(class="input-group input-group-lg")
+			textarea(class="form-control form-control-sm", name="query", placeholder="hex data", rows="6", value=(query), style="width: 90%;")
+		br
+		div(class="input-group-append")
+			button(type="submit", class="btn btn-primary") Decode
+	ul.nav.nav-tabs.mb-3
+		li.nav-item
+			a.nav-link.active(data-toggle="tab", href="#tab-details", role="tab") Details
+		li.nav-item
+			a.nav-link(data-toggle="tab", href="#tab-json", role="tab") JSON
 
-        div.tab-content
-            div(id="tab-details", class="tab-pane active", role="tabpanel")
-                if type === "script"           
-                    div(class="mb-5") !{decodedDetails}
-                else if type === "tx"
-                    if (tx.vin[0].coinbase)
-                      div.card.shadow-sm.mb-3
-                        div.card-body.px-2.px-md-3
-                          h2.h6.mb-0 Coinbase
-                          hr
+	div.tab-content
+		div(id="tab-details", class="tab-pane active", role="tabpanel")
+			if type === "script"
+				div(class="mb-5") !{decodedDetails}
+			else if type === "tx"
+				if (tx.vin[0].coinbase)
+					div.card.shadow-sm.mb-3
+						div.card-body.px-2.px-md-3
+							h2.h6.mb-0 Coinbase
+							hr
 
-                          h6 Hex
-                          div.bg-light.px-2.py-2.mb-3.border
-                            span.text-monospace.word-wrap #{tx.vin[0].coinbase}
+							h6 Hex
+							div.bg-light.px-2.py-2.mb-3.border
+								span.text-monospace.word-wrap #{tx.vin[0].coinbase}
 
-                          h6 Decoded
-                          div.bg-light.px-2.py-2.border
-                            span.text-monospace.word-wrap #{utils.hex2ascii(tx.vin[0].coinbase)}
+							h6 Decoded
+							div.bg-light.px-2.py-2.border
+								span.text-monospace.word-wrap #{utils.hex2ascii(tx.vin[0].coinbase)}
 
-                    div.card.shadow-sm.mb-3
-                      div.card-body.px-2.px-md-3
-                        h2.h6.mb-0
-                          span #{tx.vin.length.toLocaleString()}
-                          if (tx.vin.length == 1)
-                            span Input
-                          else
-                            span Inputs
+				div.card.shadow-sm.mb-3
+					div.card-body.px-2.px-md-3
+						h2.h6.mb-0
+							span #{tx.vin.length.toLocaleString()}
+							if (tx.vin.length == 1)
+								span Input
+							else
+								span Inputs
 
-                          span.mx-2.text-muted.text-small /
+							span.mx-2.text-muted.text-small /
 
-                          span #{tx.vout.length.toLocaleString()}
-                          if (tx.vout.length == 1)
-                            span Output
-                          else
-                            span Outputs
+							span #{tx.vout.length.toLocaleString()}
+							if (tx.vout.length == 1)
+								span Output
+							else
+								span Outputs
 
-                        hr
+						hr
 
-                        - var txInputs = [];
-                        - var blockHeight = -1;
-                        include includes/transaction-io-details.pug
-         
-            div(id="tab-json", class="tab-pane", role="tabpanel")
-              pre
-                code.json.bg-light(data-lang="json") #{JSON.stringify(decodedJson, null, 4)}
+						- var txInputs = [];
+						- var blockHeight = -1;
+						include includes/transaction-io-details.pug
+
+		div(id="tab-json", class="tab-pane", role="tabpanel")
+			pre
+				code.json.bg-light(data-lang="json") #{JSON.stringify(decodedJson, null, 4)}
