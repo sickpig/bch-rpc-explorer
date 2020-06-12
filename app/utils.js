@@ -733,24 +733,26 @@ function outputTypeAbbreviation(outputType) {
 	}
 }
 
-function prettyScript(inScript, indent) {
+function prettyScript(inScript, indentChar) {
 	var indenter=["OP_IF", "OP_ELSE"]
 	var outdenter=["OP_ENDIF", "OP_ELSE"]
 
 	s = inScript.split(" ");
 	var shiftAmt=0;
 	var i;
+	var indenting = '';
 
 	for (i = 0; i < s.length; i++) {
 		var item=s[i];
 		if (s[i].slice(0,2) == "OP")
 		{
-				s[i] = "<span class='opcode'>" + s[i] + "</span>";
+			s[i] = "<span class='opcode'>" + s[i] + "</span>";
 		}
-		if (outdenter.includes(item)) shiftAmt -= indent;
+		if (outdenter.includes(item)) shiftAmt -= 1;
 		if (shiftAmt < 0) shiftAmt = 0;
-		s[i] = "<div style='text-indent: " + shiftAmt + "em'>" + s[i] + "</div>";
-		if (indenter.includes(item)) shiftAmt += indent;
+		indenting = Array(shiftAmt).join(indentChar);
+		s[i] = "<div style='text-indent: " + indenting  + "em'>" + s[i] + "</div>";
+		if (indenter.includes(item)) shiftAmt += 1;
 	}
 	return s.join("\n");
 }

@@ -550,7 +550,9 @@ router.post("/decoder", function(req, res, next) {
 		} else if ("asm" in decodedScript) {
 			res.locals.type = "script";
 			res.locals.userMessage = "";
-			res.locals.decodedDetails = utils.prettyScript(decodedScript.asm, 2);
+			// FIXME we are mixing routing with view here. What script does
+			// should be done in the views/decoder.pug
+			res.locals.decodedDetails = utils.prettyScript(decodedScript.asm, '\t');
 			res.locals.decodedJson = decodedScript;
 		} else {
 			res.locals.type = "unknown";
