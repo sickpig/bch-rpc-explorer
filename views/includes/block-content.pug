@@ -163,10 +163,13 @@ div.tab-content
 
 										span.text-muted  (#{new Decimal(100 * result.getblock.weight / coinConfig.maxBlockWeight).toDecimalPlaces(2)}% full)
 										
-
-								div(class=sumTableLabelClass) Size
-								div.text-monospace(class=sumTableValueClass) #{result.getblock.size.toLocaleString()} 
-									small B
+							if (result.getblock.size)
+								div.row
+									div(class=sumTableLabelClass) Size
+									div.text-monospace(class=sumTableValueClass)
+										- var bSizeK = result.getblock.size / 1000
+										span(style="") #{bSizeK.toLocaleString()} 
+											small KB
 
 							if (result.getblock.miner)
 								div.row
