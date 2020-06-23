@@ -52,6 +52,8 @@
 - New tool `/block-analysis` for analyzing the details of transactions in a block.* **IMPORTANT**: Use of `/block-analysis` can put heavy memory pressure on this app, depending on the details of the block being analyzed. If your app is crashing, consider setting a higher memory ceiling: `node --max_old_space_size=XXX bin/www` (where `XXX` is measured in MB).
 - Lots of minor bug fixes
 - New tool `/difficulty-history` showing a graph of the history of all difficulty adjustments
+- New tool to decode transactions script `decoder`
+- Add support for nodes that can retrieve block header (BCHN Unlimited and BCHN) and block (BCH Unlimited) by height rather than just hash
 
 #### v0.0.2
 ##### 2020-02-05
