@@ -175,16 +175,12 @@ router.get("/", function(req, res, next) {
 				}
 
 				res.render("index");
-
-				next();
 			});
 		});
 	}).catch(function(err) {
 		res.locals.userMessage = "Error loading recent blocks: " + err;
 
 		res.render("index");
-
-		next();
 	});
 });
 
@@ -431,22 +427,15 @@ router.get("/blocks", function(req, res, next) {
 			}
 
 			res.render("blocks");
-
-			next();
-
 		}).catch(function(err) {
 			res.locals.pageErrors.push(utils.logError("32974hrbfbvc", err));
 
 			res.render("blocks");
-
-			next();
 		});
 	}).catch(function(err) {
 		res.locals.userMessage = "Error: " + err;
 
 		res.render("blocks");
-
-		next();
 	});
 });
 
@@ -567,8 +556,6 @@ router.post("/decoder", function(req, res, next) {
 
 router.get("/search", function(req, res, next) {
 	res.render("search");
-
-	next();
 });
 
 router.post("/search", function(req, res, next) {
@@ -727,15 +714,10 @@ router.get("/block-height/:blockHeight", function(req, res, next) {
 
 		Promise.all(promises).then(function() {
 			res.render("block");
-
-			next();
-
 		}).catch(function(err) {
 			res.locals.userMessageMarkdown = `Failed loading block: height=**${blockHeight}**`;
 
 			res.render("block");
-
-			next();
 		});
 	}).catch(function(err) {
 		res.locals.userMessageMarkdown = `Failed loading block: height=**${blockHeight}**`;
@@ -743,8 +725,6 @@ router.get("/block-height/:blockHeight", function(req, res, next) {
 		res.locals.pageErrors.push(utils.logError("389wer07eghdd", err));
 
 		res.render("block");
-
-		next();
 	});
 });
 
@@ -809,15 +789,10 @@ router.get("/block/:blockHash", function(req, res, next) {
 
 	Promise.all(promises).then(function() {
 		res.render("block");
-
-		next();
-
 	}).catch(function(err) {
 		res.locals.userMessageMarkdown = `Failed to load block: **${blockHash}**`;
 
 		res.render("block");
-
-		next();
 	});
 });
 
@@ -927,9 +902,6 @@ router.get("/tx/:transactionId", function(req, res, next) {
 
 		Promise.all(promises).then(function() {
 			res.render("transaction");
-
-			next();
-
 		});
 
 	}).catch(function(err) {
@@ -939,8 +911,6 @@ router.get("/tx/:transactionId", function(req, res, next) {
 		res.locals.pageErrors.push(utils.logError("1237y4ewssgt", err));
 
 		res.render("transaction");
-
-		next();
 	});
 });
 
@@ -1211,15 +1181,10 @@ router.get("/address/:address", function(req, res, next) {
 
 		Promise.all(promises.map(utils.reflectPromise)).then(function() {
 			res.render("address");
-
-			next();
-
 		}).catch(function(err) {
 			res.locals.pageErrors.push(utils.logError("32197rgh327g2", err));
 
 			res.render("address");
-
-			next();
 		});
 
 	}).catch(function(err) {
@@ -1228,8 +1193,6 @@ router.get("/address/:address", function(req, res, next) {
 		res.locals.userMessageMarkdown = `Failed to load address: **${address}**`;
 
 		res.render("address");
-
-		next();
 	});
 });
 

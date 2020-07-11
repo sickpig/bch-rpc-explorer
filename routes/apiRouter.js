@@ -36,8 +36,6 @@ router.get("/blocks-by-height/:blockHeights", function(req, res, next) {
 
 	coreApi.getBlocksByHeight(blockHeights).then(function(result) {
 		res.json(result);
-
-		next();
 	});
 });
 
@@ -51,8 +49,6 @@ router.get("/block-headers-by-height/:blockHeights", function(req, res, next) {
 
 	coreApi.getBlockHeadersByHeight(blockHeights).then(function(result) {
 		res.json(result);
-
-		next();
 	});
 });
 
@@ -66,8 +62,6 @@ router.get("/block-stats-by-height/:blockHeights", function(req, res, next) {
 
 	coreApi.getBlocksStatsByHeight(blockHeights).then(function(result) {
 		res.json(result);
-
-		next();
 	});
 });
 
@@ -83,12 +77,8 @@ router.get("/mempool-txs/:txids", function(req, res, next) {
 	Promise.all(promises).then(function(results) {
 		res.json(results);
 
-		next();
-
 	}).catch(function(err) {
 		res.json({success:false, error:err});
-
-		next();
 	});
 });
 
@@ -101,13 +91,8 @@ router.get("/raw-tx-with-inputs/:txid", function(req, res, next) {
 
 	Promise.all(promises).then(function(results) {
 		res.json(results);
-
-		next();
-
 	}).catch(function(err) {
 		res.json({success:false, error:err});
-
-		next();
 	});
 });
 
@@ -125,13 +110,8 @@ router.get("/block-tx-summaries/:blockHeight/:txids", function(req, res, next) {
 
 	Promise.all(promises).then(function() {
 		res.json(results);
-
-		next();
-
 	}).catch(function(err) {
 		res.json({success:false, error:err});
-
-		next();
 	});
 });
 
@@ -160,8 +140,6 @@ router.get("/utils/:func/:params", function(req, res, next) {
 	}
 
 	res.json(data);
-
-	next();
 });
 
 
