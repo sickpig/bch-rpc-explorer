@@ -1,3 +1,12 @@
+#### v0.0.4
+##### 2020-09-07
+
+- fix address searching (prefix not mandatory anymore for cashaddr format)
+- improve electrumx connection handling
+- handle 40X/50X http error cdes properly
+- update miners list
+- fix minor UI glitches
+
 #### v0.0.3
 ##### 2020-06-23
 
