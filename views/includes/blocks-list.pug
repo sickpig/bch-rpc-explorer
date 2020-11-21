@@ -102,9 +102,6 @@ div.table-responsive
 								small.rounded.bg-primary.text-white.px-2.py-1(data-toggle="tooltip", title=(block.miner.coinbaseStr)) #{utils.ellipsize(block.miner.name, 10)}
 							else
 								small.rounded.bg-secondary.text-white.px-2.py-1(data-toggle="tooltip", title=(block.miner.coinbaseStr)) ?
-							if (block.miner.noIFP > 0)
-								span.font-weight-light.text-muted  
-								small.rounded.bg-success.text-white.px-1.py-1 NO IFP
 
 						
 						td.data-cell.text-monospace.text-right #{block.nTx.toLocaleString()}

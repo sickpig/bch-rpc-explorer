@@ -397,7 +397,6 @@ function getMinerFromCoinbaseTx(tx) {
 	var minerInfo = {
 		coinbaseStr: hex2string(tx.vin[0].coinbase)
 	};
-	minerInfo.noIFP = minerInfo.coinbaseStr.search(/bchn/i)
 
 	if (global.miningPoolsConfigs) {
 		poolLoop:

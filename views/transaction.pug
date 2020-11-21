@@ -168,9 +168,6 @@ block content
 									div.summary-table-content.text-monospace
 										if (minerInfo.identifiedBy)
 											small.data-tag.bg-primary(data-toggle="tooltip", title=("Identified by: " + minerInfo.identifiedBy)) #{minerInfo.name}
-											if (minerInfo.noIFP > 0)
-												small.bg-white.text-white.px-0.py-0
-												small.data-tag.bg-success NO IFP
 										else
 											small.data-tag.bg-primary ?
 
