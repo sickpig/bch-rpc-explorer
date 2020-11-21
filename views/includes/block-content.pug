@@ -432,8 +432,7 @@ div.tab-content
 						include ./pagination.pug
 					
 	div.tab-pane(id="tab-json", role="tabpanel")
-		- var blockDetails = JSON.parse(JSON.stringify(result.getblock));
-		- blockDetails.tx = "See 'Transaction IDs'";
+		- result.getblock.tx = "See 'Transaction IDs'";
 
 		ul.nav.nav-pills.mb-3
 			li.nav-item
@@ -454,7 +453,7 @@ div.tab-content
 
 						div.highlight
 							pre
-								code.json.bg-light #{JSON.stringify(blockDetails, null, 4)}
+								code.json.bg-light #{JSON.stringify(result.getblock, null, 4)}
 
 			div.tab-pane(id="tab-json-tx-ids", role="tabpanel")
 				div.card.shadow-sm.mb-3
@@ -462,9 +461,12 @@ div.tab-content
 						h4.h6.mb-0 Transaction IDs
 						hr
 
+						div.spinner-border(id="tab-json-tx-ids-spinner", role="status")
+							span.sr-only Loading...
+
 						div.highlight
 							pre
-								code.json.bg-light #{JSON.stringify(result.getblock.tx, null, 4)}
+								code.json.bg-light
 
 			if (result.blockstats)
 				div.tab-pane(id="tab-json-blockstats", role="tabpanel")

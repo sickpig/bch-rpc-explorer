@@ -84,6 +84,13 @@ router.get("/block-stats-by-height/:blockHeights", function(req, res, next) {
 	});
 });
 
+router.get("/txids-by-block/:blockHash", function(req, res, next) {
+	coreApi.getBlock(req.params.blockHash, true).then(function(block) {
+		res.json(block.tx);
+		utils.perfMeasure(req);
+	});
+});
+
 router.get("/mempool-txs/:txids", function(req, res, next) {
 	var txids = req.params.txids.split(",");
 

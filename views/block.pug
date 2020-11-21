@@ -15,3 +15,17 @@ block content
 		hr
 
 		include includes/block-content.pug
+
+block endOfBody
+	script.
+		$(document).ready(function() {
+			var blockHash = "!{result.getblock.hash}";
+			$('a[href="#tab-json-tx-ids"]').one('click', function (e) {
+				$.ajax({
+					url: `/api/txids-by-block/${blockHash}`
+				}).done(function(txids) {
+					$('#tab-json-tx-ids code').html(hljs.highlight('json', JSON.stringify(txids, null, 4)).value);
+					$('#tab-json-tx-ids-spinner').hide();
+				});
+			});
+		});
