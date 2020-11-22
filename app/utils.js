@@ -389,6 +389,8 @@ function logMemoryUsage() {
 	//debugLog("memoryUsage: heapUsed=" + mbUsed + ", heapTotal=" + mbTotal + ", ratio=" + parseInt(mbUsed / mbTotal * 100));
 }
 
+var possibleMinerSignalRE = /\/(.*)\//;
+
 function getMinerFromCoinbaseTx(tx) {
 	if (tx == null || tx.vin == null || tx.vin.length == 0) {
 		return null;
@@ -397,6 +399,10 @@ function getMinerFromCoinbaseTx(tx) {
 	var minerInfo = {
 		coinbaseStr: hex2string(tx.vin[0].coinbase)
 	};
+
+	var possibleSignal = minerInfo.coinbaseStr.match(possibleMinerSignalRE);
+	if (possibleSignal)
+		minerInfo.possibleSignal = possibleSignal[1];
 
 	if (global.miningPoolsConfigs) {
 		poolLoop:

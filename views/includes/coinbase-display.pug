@@ -1,0 +1,6 @@
+if (block.miner && block.miner.name)
+    small.rounded.bg-primary.text-white.px-2.py-1(data-toggle="tooltip", title=(("Identified by: " + block.miner.identifiedBy + " in " + block.miner.coinbaseStr))) #{utils.ellipsize(block.miner.name, 25)}
+else if (block.miner && block.miner.possibleSignal)
+    small.rounded.bg-info.text-white.px-2.py-1(data-toggle="tooltip", title=(block.miner.coinbaseStr)) #{utils.ellipsize(block.miner.possibleSignal, 25)}
+else
+    small.rounded.bg-secondary.text-white.px-2.py-1(data-toggle="tooltip", title=(block.miner.coinbaseStr)) ?

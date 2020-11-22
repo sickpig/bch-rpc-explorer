@@ -175,10 +175,8 @@ div.tab-content
 								div.row
 									div.summary-split-table-label Miner
 									div.summary-split-table-content.text-monospace.mb-0
-										if (result.getblock.miner.identifiedBy)
-											small.data-tag.bg-primary(data-toggle="tooltip", title=("Identified by: " + result.getblock.miner.identifiedBy)) #{result.getblock.miner.name}
-										else
-											small.data-tag.bg-primary(data-toggle="tooltip", title=(result.getblock.miner.coinbaseStr)) ?
+										- var block = result.getblock
+										include coinbase-display.pug
 
 							div.row
 								div(class=sumTableLabelClass) Confirmations

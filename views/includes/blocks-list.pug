@@ -98,11 +98,7 @@ div.table-responsive
 									span.font-weight-light.text-muted -
 						
 						td.data-cell.text-monospace.text-right
-							if (block.miner && block.miner.name)
-								small.rounded.bg-primary.text-white.px-2.py-1(data-toggle="tooltip", title=(block.miner.coinbaseStr)) #{utils.ellipsize(block.miner.name, 10)}
-							else
-								small.rounded.bg-secondary.text-white.px-2.py-1(data-toggle="tooltip", title=(block.miner.coinbaseStr)) ?
-
+							include coinbase-display.pug
 						
 						td.data-cell.text-monospace.text-right #{block.nTx.toLocaleString()}
 
