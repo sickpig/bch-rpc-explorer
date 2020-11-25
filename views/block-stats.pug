@@ -333,7 +333,7 @@ block endOfBody
 
 			for (var i = results.length - 1; i >= 0; i--) {
 				summary.avgfeerate.push({x:results[i].height, y:results[i].avgfeerate});
-				summary.medianfeerate.push({x:results[i].height, y:results[i].feerate_percentiles[2]});
+				summary.medianfeerate.push({x:results[i].height, y:results[i].medianfeerate});
 				summary.minfeerate.push({x:results[i].height, y:results[i].minfeerate});
 				
 				summary.maxfeerate.push({x:results[i].height, y:results[i].maxfeerate});
