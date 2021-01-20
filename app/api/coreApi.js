@@ -303,9 +303,10 @@ function getTxCountStats(dataPtCount, blockStart, blockEnd) {
 				blockEnd += getblockchaininfo.blocks;
 			}
 
+			var intervalBlockCount = (blockEnd - blockStart) / (dataPoints - 1);
 			var chainTxStatsIntervals = [];
 			for (var i = 0; i < dataPoints; i++) {
-				chainTxStatsIntervals.push(parseInt(Math.max(10, getblockchaininfo.blocks - blockStart - i * (blockEnd - blockStart) / (dataPoints - 1) - 1)));
+				chainTxStatsIntervals.push(parseInt(Math.max(10, getblockchaininfo.blocks - blockStart - i * intervalBlockCount - 1)));
 			}
 
 			var promises = [];
@@ -327,11 +328,15 @@ function getTxCountStats(dataPtCount, blockStart, blockEnd) {
 					txRates: []
 				};
 
-				for (var i = results.length - 1; i >= 0; i--) {
+				var lastTxCount = results[0].txcount - results[0].window_tx_count;
+				for (var i = 0; i < results.length; i++) {
 					if (results[i].window_tx_count) {
-						txStats.txCounts.push( {x:(getblockchaininfo.blocks - results[i].window_block_count), y: (results[i].txcount - results[i].window_tx_count)} );
-						txStats.txRates.push( {x:(getblockchaininfo.blocks - results[i].window_block_count), y: (results[i].txrate)} );
-						txStats.txLabels.push(i);
+						var txCount = results[i].txcount - results[i].window_tx_count;
+						var txRate = (txCount - lastTxCount) / (intervalBlockCount * 600);
+						txStats.txCounts.unshift( {x:(getblockchaininfo.blocks - results[i].window_block_count), y: txCount} );
+						txStats.txRates.unshift( {x:(getblockchaininfo.blocks - results[i].window_block_count), y: txRate} );
+						txStats.txLabels.unshift(i);
+						lastTxCount = txCount;
 					}
 				}
 				
