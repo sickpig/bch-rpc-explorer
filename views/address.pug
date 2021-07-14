@@ -180,8 +180,6 @@ block content
 									- var flags = [x.isvalid, x.isscript, x.ismine, x.iswatchonly];
 
 									each flagName, index in flagNames
-										if flags[index] === undefined
-											- continue
 										div.row
 											div.summary-split-table-label #{flagName}
 											div.summary-split-table-content.text-monospace
