@@ -48,7 +48,7 @@
     "moment-duration-format": "^2.3.2",
     "morgan": "^1.10.0",
     "node-addon-api": "^3.0.2",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "qrcode": "^1.4.4",
     "redis": "^2.8.0",
     "request": "^2.88.2",
