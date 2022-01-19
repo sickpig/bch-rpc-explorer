@@ -955,10 +955,6 @@ router.get("/tx/:transactionId", function(req, res, next) {
 				coreApi.getBlockHeader(tx.blockhash).then(function(blockHeader) {
 					res.locals.result.blockHeader = blockHeader;
 					resolve()
-				}).catch(function(err) {
-					res.locals.pageErrors.push(utils.logError("1234abc456efd", err));
-
-					reject(err);
 				});
 			}));
 		}
@@ -967,12 +963,13 @@ router.get("/tx/:transactionId", function(req, res, next) {
 			res.render("transaction");
 			utils.perfMeasure(req);
 
-		}).catch(function(err) {
-			res.locals.userMessageMarkdown = `Failed to load transaction: txid=**${txid}**`;
-			res.render("transacition");
+
 		});
+
 	}).catch(function(err) {
 		res.locals.userMessageMarkdown = `Failed to load transaction: txid=**${txid}**`;
+
+	}).catch(function(err) {
 		res.locals.pageErrors.push(utils.logError("1237y4ewssgt", err));
 
 		res.render("transaction");
