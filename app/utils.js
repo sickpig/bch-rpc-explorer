@@ -1,9 +1,9 @@
 var debug = require("debug");
 
-var debugLog = debug("bchexp:utils");
-var debugErrorLog = debug("bchexp:error");
-var debugErrorVerboseLog = debug("bchexp:errorVerbose");
-var debugPerfLog = debug("bchexp:actionPerformace");
+var debugLog = debug("nexexp:utils");
+var debugErrorLog = debug("nexexp:error");
+var debugErrorVerboseLog = debug("nexexp:errorVerbose");
+var debugPerfLog = debug("nexexp:actionPerformace");
 
 var Decimal = require("decimal.js");
 var axios = require("axios");

@@ -99,34 +99,34 @@ block content
 
 				div.card.shadow-sm.mb-3
 					div.card-body.px-2.px-sm-3
-						h3.h6.mb-0 Mempool Info
+						h3.h6.mb-0 Txpool Info
 						hr
 
 						div.clearfix
 							div.row
 								div.summary-table-label TX count
-								div.summary-table-content.text-monospace(id="mempool-tx-count") #{getmempoolinfo.size}
+								div.summary-table-content.text-monospace(id="txpool-tx-count") #{gettxpoolinfo.size}
 
 							div.row
-								- var data = utils.formatLargeNumber(getmempoolinfo.bytes, 1);
+								- var data = utils.formatLargeNumber(gettxpoolinfo.bytes, 1);
 								- var abbr = data[1].abbreviation || "";
 								- var text = `${data[0]} ${abbr}B`;
 								div.summary-table-label TX size
-								div.summary-table-content.text-monospace(id="mempool-tx-size") #{text}
+								div.summary-table-content.text-monospace(id="txpool-tx-size") #{text}
 
 							div.row
-								- var data = utils.formatLargeNumber(getmempoolinfo.usage, 1);
+								- var data = utils.formatLargeNumber(gettxpoolinfo.usage, 1);
 								- var abbr = data[1].abbreviation || "";
 								- var text = `${data[0]} ${abbr}B`;
 								div.summary-table-label Memory size
-								div.summary-table-content.text-monospace(id="mempool-mem-size") #{text}
+								div.summary-table-content.text-monospace(id="txpool-mem-size") #{text}
 
 							div.row
-								- var data = utils.formatLargeNumber(getmempoolinfo.maxmempool, 1);
+								- var data = utils.formatLargeNumber(gettxpoolinfo.maxtxpool, 1);
 								- var abbr = data[1].abbreviation || "";
 								- var text = `${data[0]} ${abbr}B`;
 								div.summary-table-label Max memory size
-								div.summary-table-content.text-monospace(id="mempool-mem-limit") #{text}
+								div.summary-table-content.text-monospace(id="txpool-mem-limit") #{text}
 
 
 				div.card.shadow-sm.mb-3
@@ -188,7 +188,7 @@ block content
 					li.nav-item
 						a.nav-link(data-toggle="tab", href="#tab-getnetworkinfo", role="tab") getnetworkinfo
 					li.nav-item
-						a.nav-link(data-toggle="tab", href="#tab-getmempoolinfo", role="tab") getmempoolinfo
+						a.nav-link(data-toggle="tab", href="#tab-gettxpoolinfo", role="tab") gettxpoolinfo
 				
 				div.tab-content
 					div.tab-pane.active(id="tab-getblockchaininfo", role="tabpanel")
@@ -221,15 +221,15 @@ block content
 									pre
 										code.json.bg-light(data-lang="json") #{JSON.stringify(getnetworkinfo, null, 4)}
 
-					div.tab-pane(id="tab-getmempoolinfo", role="tabpanel")
+					div.tab-pane(id="tab-gettxpoolinfo", role="tabpanel")
 						div.card.shadow-sm.mb-3
 							div.card-body
-								h4.h6.mb-0 getmempoolinfo
+								h4.h6.mb-0 gettxpoolinfo
 								hr
 
 								div.highlight
 									pre
-										code.json.bg-light(data-lang="json") #{JSON.stringify(getmempoolinfo, null, 4)}
+										code.json.bg-light(data-lang="json") #{JSON.stringify(gettxpoolinfo, null, 4)}
 
 block endOfBody
 	script.
@@ -237,11 +237,11 @@ block endOfBody
 			setInterval(function() {
 				if (document.hidden)
 					return;
-				$.ajax({ url: "/api/mempoolinfo" }).done(function(mpi) {
-					$('#mempool-tx-count').text(mpi.size);
-					$('#mempool-tx-size').text(mpi.bytesHuman);
-					$('#mempool-mem-size').text(mpi.usageHuman);
-					$('#mempool-mem-limit').text(mpi.maxmempoolHuman);
+				$.ajax({ url: "/api/txpoolinfo" }).done(function(mpi) {
+					$('#txpool-tx-count').text(mpi.size);
+					$('#txpool-tx-size').text(mpi.bytesHuman);
+					$('#txpool-mem-size').text(mpi.usageHuman);
+					$('#txpool-mem-limit').text(mpi.maxtxpoolHuman);
 				});
 			}, 2500);
 		});

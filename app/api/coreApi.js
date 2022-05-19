@@ -1,6 +1,6 @@
 var debug = require("debug");
 
-var debugLog = debug("bchexp:core");
+var debugLog = debug("nexexp:core");
 
 var LRU = require("lru-cache");
 var fs = require('fs');
@@ -221,13 +221,13 @@ function getNetTotals() {
 	return tryCacheThenRpcApi(miscCache, "getNetTotals", 10 * ONE_SEC, rpcApi.getNetTotals);
 }
 
-function getMempoolInfo() {
-	return tryCacheThenRpcApi(miscCache, "getMempoolInfo", ONE_SEC, rpcApi.getMempoolInfo);
+function getTxpoolInfo() {
+	return tryCacheThenRpcApi(miscCache, "getTxpoolInfo", ONE_SEC, rpcApi.getTxpoolInfo);
 }
 
-function getMempoolTxids() {
+function getTxpoolTxids() {
 	// no caching, that would be dumb
-	return rpcApi.getMempoolTxids();
+	return rpcApi.getTxpoolTxids();
 }
 
 function getMiningInfo() {
@@ -430,9 +430,9 @@ function getPeerSummary() {
 	});
 }
 
-function getMempoolDetails(start, count) {
+function getTxpoolDetails(start, count) {
 	return new Promise(function(resolve, reject) {
-		tryCacheThenRpcApi(miscCache, "getMempoolTxids", ONE_SEC, rpcApi.getMempoolTxids).then(function(resultTxids) {
+		tryCacheThenRpcApi(miscCache, "getTxpoolTxids", ONE_SEC, rpcApi.getTxpoolTxids).then(function(resultTxids) {
 			var txids = [];
 
 			for (var i = start; (i < resultTxids.length && i < (start + count)); i++) {
@@ -453,17 +453,19 @@ function getBlockInt(hash_or_height)
 {
 	return new Promise(function(resolve, reject) {
 		rpcApi.getBlock(hash_or_height).then(function(block) {
-			getRawTransaction(block.tx[0]).then(function(tx) {
+			getRawTransaction(block.txid[0]).then(function(tx) {
 				block.coinbaseTx = tx;
 				block.totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(tx, block.height);
 				block.subsidy = coinConfig.blockRewardFunction(block.height, global.activeBlockchain);
 				if (block.nTx === undefined)
-					block.nTx = block.tx.length;
+					block.nTx = block.txid.length;
 				resolve(block);
 			}).catch(function(err) {
+				debugLog(err);
 				reject(err);
 			});
 		}).catch(function(err) {
+			debugLog(err);
 			reject(err);
 		});
 	});
@@ -474,7 +476,7 @@ function getBlockCached(hash_or_height, full = false) {
 		return tryCacheThenRpcApi(blockCache, "getBlock-" + hash_or_height, ONE_YR, function() {
 			return new Promise(function(resolve, reject) {
 				getBlockInt(hash_or_height).then(function(block) {
-					block.tx.length = 1; // only keep the coinbase TX when caching the result
+					block.txid.length = 1; // only keep the coinbase TX when caching the result
 					resolve(block);
 				}).catch(function(err) {
 					reject(err);
@@ -576,6 +578,7 @@ function getBlocksStats(blockHashes) {
 		Promise.all(blockHashes.map(h => getBlockStats(h))).then(function(results) {
 			resolve(results);
 		}).catch(function(err) {
+			debugLog(err);
 			reject(err);
 		});
 	});
@@ -679,9 +682,9 @@ function getUtxo(txid, outputIndex) {
 	});
 }
 
-function getMempoolTxDetails(txid, includeAncDec) {
-	return tryCacheThenRpcApi(miscCache, "mempoolTxDetails-" + txid + "-" + includeAncDec, ONE_HR, function() {
-		return rpcApi.getMempoolTxDetails(txid, includeAncDec);
+function getTxpoolTxDetails(txid, includeAncDec) {
+	return tryCacheThenRpcApi(miscCache, "txpoolTxDetails-" + txid + "-" + includeAncDec, ONE_HR, function() {
+		return rpcApi.getTxpoolTxDetails(txid, includeAncDec);
 	});
 }
 
@@ -859,13 +862,13 @@ function getBlockByHashWithTransactions(blockHash, txLimit, txOffset) {
 	return new Promise(function(resolve, reject) {
 		getBlock(blockHash, true).then(function(block) {
 			var txids = [];
-			
+
 			if (txOffset > 0) {
-				txids.push(block.tx[0]);
+				txids.push(block.txid[0]);
 			}
 
-			for (var i = txOffset; i < Math.min(txOffset + txLimit, block.tx.length); i++) {
-				txids.push(block.tx[i]);
+			for (var i = txOffset; i < Math.min(txOffset + txLimit, block.txid.length); i++) {
+				txids.push(block.txid[i]);
 			}
 
 			getRawTransactionsWithInputs(txids, config.site.txMaxInput).then(function(txsResult) {
@@ -921,15 +924,15 @@ function getBlockList(args)
 					blockHeights.unshift(extraElement);
 				hasExtraElement = true;
 			}
-			
+
 			Promise.all(blockHeights.map(h => rpcApi.getBlockHash(h))).then(function(blockHashes) {
 				var promises = [];
 				promises.push(getBlocks(blockHashes));
 				promises.push(getBlocksStats(blockHashes));
+
 				Promise.all(promises).then(function(promiseResults) {
 					var blocks = promiseResults[0];
 					var blockstats = promiseResults[1];
-	
 					var data = blockHeights.map((h, i) => {
 						var res = blocks[i];
 						if (blockstats) {
@@ -938,7 +941,7 @@ function getBlockList(args)
 						}
 						return res;
 					});
-	
+
 					// Calculate time deltas
 					var prevIdx = sortDesc ? 1 : -1;
 					data.forEach((d, i) => { if (data[i + prevIdx]) d.timeDiff = d.time - data[i + prevIdx].time });
@@ -953,12 +956,15 @@ function getBlockList(args)
 
 					resolve({ blockList: data, blockListArgs: args, hasBlockStats: !!blockstats, blockChainInfo: getblockchaininfo });
 				}).catch(function(err) {
+					debugLog(err);
 					reject(err);
 				});
 			}).catch(function(err) {
+				debugLog(err);
 				reject(err);
 			});
 		}).catch(function(err) {
+			debugLog(err);
 			reject(err);
 		});
 	});
@@ -1092,8 +1098,8 @@ module.exports = {
 	getBlockchainInfo: getBlockchainInfo,
 	getNetworkInfo: getNetworkInfo,
 	getNetTotals: getNetTotals,
-	getMempoolInfo: getMempoolInfo,
-	getMempoolTxids: getMempoolTxids,
+	getTxpoolInfo: getTxpoolInfo,
+	getTxpoolTxids: getTxpoolTxids,
 	getMiningInfo: getMiningInfo,
 	getBlock: getBlock,
 	getBlocks: getBlocks,
@@ -1105,7 +1111,7 @@ module.exports = {
 	getRawTransactions: getRawTransactions,
 	getRawTransactionsWithInputs: getRawTransactionsWithInputs,
 	getTxUtxos: getTxUtxos,
-	getMempoolTxDetails: getMempoolTxDetails,
+	getTxpoolTxDetails: getTxpoolTxDetails,
 	getUptimeSeconds: getUptimeSeconds,
 	getHelp: getHelp,
 	getRpcMethodHelp: getRpcMethodHelp,
@@ -1113,7 +1119,7 @@ module.exports = {
 	logCacheSizes: logCacheSizes,
 	getPeerSummary: getPeerSummary,
 	getChainTxStats: getChainTxStats,
-	getMempoolDetails: getMempoolDetails,
+	getTxpoolDetails: getTxpoolDetails,
 	getTxCountStats: getTxCountStats,
 	getUtxoSetSummary: getUtxoSetSummary,
 	getNetworkHashrate: getNetworkHashrate,

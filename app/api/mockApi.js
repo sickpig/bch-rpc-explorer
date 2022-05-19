@@ -24,16 +24,16 @@ function getNetTotals() {
 	return getRpcData("getnettotals");
 }
 
-function getMempoolInfo() {
-	return getRpcData("getmempoolinfo");
+function getTxpoolInfo() {
+	return getRpcData("gettxpoolinfo");
 }
 
 function getUptimeSeconds() {
 	return getRpcData("uptime");
 }
 
-function getRawMempool() {
-	return getRpcDataWithParams("getrawmempool", true);
+function getRawTxpool() {
+	return getRpcDataWithParams("getrawtxpool", true);
 }
 
 function getBlockByHeight(blockHeight) {
@@ -295,13 +295,13 @@ module.exports = {
 	getBlockchainInfo: getBlockchainInfo,
 	getNetworkInfo: getNetworkInfo,
 	getNetTotals: getNetTotals,
-	getMempoolInfo: getMempoolInfo,
+	getTxpoolInfo: getTxpoolInfo,
 	getBlockByHeight: getBlockByHeight,
 	getBlocksByHeight: getBlocksByHeight,
 	getBlockByHash: getBlockByHash,
 	getRawTransaction: getRawTransaction,
 	getRawTransactions: getRawTransactions,
-	getRawMempool: getRawMempool,
+	getRawTxpool: getRawTxpool,
 	getUptimeSeconds: getUptimeSeconds,
 	getHelp: getHelp,
 	getRpcMethodHelp: getRpcMethodHelp,

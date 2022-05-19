@@ -2,5 +2,7 @@ if (miner && miner.name)
     small.rounded.bg-primary.text-white.px-2.py-1(data-toggle="tooltip", title=(("Identified by: " + miner.identifiedBy))) #{utils.ellipsize(miner.name, 25)}
 else if (miner && miner.possibleSignal)
     small.rounded.bg-info.text-white.px-2.py-1(data-toggle="tooltip", title=(miner.coinbaseStr)) #{utils.ellipsize(miner.possibleSignal, 25)}
-else
+else if (miner && miner.coinbaseStr)
     small.rounded.bg-secondary.text-white.px-2.py-1(data-toggle="tooltip", title=(miner.coinbaseStr)) ?
+else
+    small.rounded.bg-secondary.text-white.px-2.py-1(data-toggle="tooltip", title=("No coinbase available")) ?

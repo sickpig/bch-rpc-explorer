@@ -1,5 +1,5 @@
 var debug = require("debug");
-var debugLog = debug("bchexp:router");
+var debugLog = debug("nexexp:router");
 
 var express = require('express');
 var csurf = require('csurf');
@@ -21,9 +21,9 @@ var addressApi = require("./../app/api/addressApi.js");
 
 const forceCsrf = csurf({ ignoreMethods: [] });
 
-router.get("/mempoolinfo", function(req, res, next) {
-	coreApi.getMempoolInfo().then(function(info) {
-		["bytes", "usage", "maxmempool"].map(p => {
+router.get("/txpoolinfo", function(req, res, next) {
+	coreApi.getTxpoolInfo().then(function(info) {
+		["bytes", "usage", "maxtxpool"].map(p => {
 			var data = utils.formatLargeNumber(info[p], 1);
 			var abbr = data[1].abbreviation || "";
 			return { k: p + "Human", v: `${data[0]} ${abbr}B` }
@@ -120,13 +120,13 @@ router.get("/check-for-new-block/:maxH", function(req, res, next) {
 
 });
 
-router.get("/mempool-txs/:txids", function(req, res, next) {
+router.get("/txpool-txs/:txids", function(req, res, next) {
 	var txids = req.params.txids.split(",");
 
 	var promises = [];
 
 	for (var i = 0; i < txids.length; i++) {
-		promises.push(coreApi.getMempoolTxDetails(txids[i], false));
+		promises.push(coreApi.getTxpoolTxDetails(txids[i], false));
 	}
 
 	Promise.all(promises).then(function(results) {

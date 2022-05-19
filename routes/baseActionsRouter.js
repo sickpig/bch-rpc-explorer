@@ -1,5 +1,5 @@
 var debug = require("debug");
-var debugLog = debug("bchexp:router");
+var debugLog = debug("nexexp:router");
 
 var express = require('express');
 var csurf = require('csurf');
@@ -58,7 +58,7 @@ router.get("/", function(req, res, next) {
 
 	var promises = [];
 
-	promises.push(coreApi.getMempoolInfo());
+	promises.push(coreApi.getTxpoolInfo());
 	promises.push(coreApi.getMiningInfo());
 	promises.push(coreApi.getNetworkHashrate(6));
 	promises.push(coreApi.getNetworkHashrate(144));
@@ -112,7 +112,7 @@ router.get("/", function(req, res, next) {
 		res.locals.blocksUntilDifficultyAdjustment = ((res.locals.difficultyPeriod + 1) * coinConfig.difficultyAdjustmentBlockCount) - data.blockList[0].height;
 
 		Promise.all(promises).then(function(promiseResults) {
-			res.locals.mempoolInfo = promiseResults[0];
+			res.locals.txpoolInfo = promiseResults[0];
 			res.locals.miningInfo = promiseResults[1];
 			res.locals.hashrate1h = promiseResults[2];
 			res.locals.hashrate1d = promiseResults[3];
@@ -152,7 +152,7 @@ router.get("/node-status", function(req, res, next) {
 		{ target: "getnetworkinfo", promise: coreApi.getNetworkInfo() },
 		{ target: "uptimeSeconds", promise: coreApi.getUptimeSeconds() },
 		{ target: "getnettotals", promise: coreApi.getNetTotals() },
-		{ target: "getmempoolinfo", promise: coreApi.getMempoolInfo() },
+		{ target: "gettxpoolinfo", promise: coreApi.getTxpoolInfo() },
 	];
 	Promise.allSettled(required.map(r => r.promise)).then(function(promiseResults) {
 		var rejects = promiseResults.filter(r => r.status === "rejected");
@@ -169,35 +169,35 @@ router.get("/node-status", function(req, res, next) {
 	});
 });
 
-router.get("/mempool-summary", function(req, res, next) {
+router.get("/txpool-summary", function(req, res, next) {
 	res.locals.satoshiPerByteBucketMaxima = coinConfig.feeSatoshiPerByteBucketMaxima;
 
-	coreApi.getMempoolInfo().then(function(mempoolinfo) {
-		res.locals.mempoolinfo = mempoolinfo;
+	coreApi.getTxpoolInfo().then(function(txpoolinfo) {
+		res.locals.txpoolinfo = txpoolinfo;
 
-		coreApi.getMempoolTxids().then(function(mempooltxids) {
+		coreApi.getTxpoolTxids().then(function(txpooltxids) {
 			var debugMaxCount = 0;
 
 			var inputChunkSize = 25;
-			if (mempooltxids.length > 1000)
+			if (txpooltxids.length > 1000)
 				inputChunkSize = 100;
 
 			if (debugMaxCount > 0) {
 				var debugtxids = [];
-				for (var i = 0; i < Math.min(debugMaxCount, mempooltxids.length); i++) {
-					debugtxids.push(mempooltxids[i]);
+				for (var i = 0; i < Math.min(debugMaxCount, txpooltxids.length); i++) {
+					debugtxids.push(txpooltxids[i]);
 				}
 
-				res.locals.mempooltxidChunks = utils.splitArrayIntoChunks(debugtxids, inputChunkSize);
+				res.locals.txpooltxidChunks = utils.splitArrayIntoChunks(debugtxids, inputChunkSize);
 
 			} else {
-				res.locals.mempooltxidChunks = utils.splitArrayIntoChunks(mempooltxids, inputChunkSize);
+				res.locals.txpooltxidChunks = utils.splitArrayIntoChunks(txpooltxids, inputChunkSize);
 			}
 
 			res.locals.inputChunkSize = inputChunkSize;
 
 
-			res.render("mempool-summary");
+			res.render("txpool-summary");
 			utils.perfMeasure(req);
 
 		});
@@ -205,7 +205,7 @@ router.get("/mempool-summary", function(req, res, next) {
 	}).catch(function(err) {
 		res.locals.userMessage = "Error: " + err;
 
-		res.render("mempool-summary");
+		res.render("txpool-summary");
 
 	});
 });
@@ -350,10 +350,6 @@ router.get("/mining-summary", function(req, res, next) {
 });
 
 router.get("/block-stats", function(req, res, next) {
-	if (semver.lt(global.btcNodeSemver, rpcApi.minRpcVersions.getblockstats)) {
-		res.locals.rpcApiUnsupportedError = {rpc:"getblockstats", version:rpcApi.minRpcVersions.getblockstats};
-	}
-
 	coreApi.getBlockchainInfo().then(function(getblockchaininfo) {
 		res.locals.currentBlockHeight = getblockchaininfo.blocks;
 
@@ -936,8 +932,8 @@ router.get("/tx/:transactionId", function(req, res, next) {
 		if (tx.confirmations == 0) {
 
 			promises.push(new Promise(function(resolve, reject) {
-				coreApi.getMempoolTxDetails(txid).then(function(mempoolDetails) {
-					res.locals.mempoolDetails = mempoolDetails;
+				coreApi.getTxpoolTxDetails(txid).then(function(txpoolDetails) {
+					res.locals.txpoolDetails = txpoolDetails;
 
 					resolve();
 
@@ -1032,7 +1028,7 @@ router.get("/address/:address", function(req, res, next) {
 			//res.locals.pageErrors.push(utils.logError("u02qg02yqge", err));
 			try {
 				var saneAddress = "";
-				var prefix = global.activeBlockchain == "main" ? "bitcoincash:" : "bchtest:";
+				var prefix = global.activeBlockchain == "nexa" ? "nexa:" : "nexatest:";
 				if(!address.includes(prefix)) {
 					saneAddress = prefix.concat(address);
 				} else {
@@ -1275,7 +1271,7 @@ router.get("/address/:address", function(req, res, next) {
 
 router.get("/rpc-terminal", function(req, res, next) {
 	if (!config.demoSite && !req.authenticated) {
-		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'BTCEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
+		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'NEXEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
 
 //		next();
 
@@ -1290,7 +1286,7 @@ router.get("/rpc-terminal", function(req, res, next) {
 
 router.post("/rpc-terminal", function(req, res, next) {
 	if (!config.demoSite && !req.authenticated) {
-		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'BTCEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
+		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'NEXEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
 
 		utils.perfMeasure(req);
 
@@ -1348,7 +1344,7 @@ router.post("/rpc-terminal", function(req, res, next) {
 
 router.get("/rpc-browser", function(req, res, next) {
 	if (!config.demoSite && !req.authenticated) {
-		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'BTCEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
+		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'NEXEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
 
 		utils.perfMeasure(req);
 
@@ -1503,8 +1499,8 @@ router.get("/unconfirmed-tx", function(req, res, next) {
 	res.locals.sort = sort;
 	res.locals.paginationBaseUrl = "/unconfirmed-tx";
 
-	coreApi.getMempoolDetails(offset, limit).then(function(mempoolDetails) {
-		res.locals.mempoolDetails = mempoolDetails;
+	coreApi.getTxpoolDetails(offset, limit).then(function(txpoolDetails) {
+		res.locals.txpoolDetails = txpoolDetails;
 
 		res.render("unconfirmed-transactions");
 		utils.perfMeasure(req);

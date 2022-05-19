@@ -7,8 +7,8 @@ block content
 	h1.h3 Unconfirmed Transactions
 	hr
 
-	if (mempoolDetails)
-		- var txCount = mempoolDetails.txCount;
+	if (txpoolDetails)
+		- var txCount = txpoolDetails.txCount;
 
 		div.card.shadow-sm.mb-3
 			div.card-body
@@ -20,7 +20,7 @@ block content
 
 				hr
 
-				each tx, txIndex in mempoolDetails.transactions
+				each tx, txIndex in txpoolDetails.transactions
 					div.card.shadow-sm.mb-3
 						div.card-header.text-monospace
 							if (tx && tx.txid)
@@ -29,7 +29,7 @@ block content
 								a(href=("/tx/" + tx.txid)) #{tx.txid}
 
 						div.card-body
-							- var txInputs = mempoolDetails.txInputsByTransaction[tx.txid];
+							- var txInputs = txpoolDetails.txInputsByTransaction[tx.txid];
 							- var blockHeight = -1;
 
 							include includes/transaction-io-details.pug

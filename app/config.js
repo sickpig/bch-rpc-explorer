@@ -5,7 +5,7 @@ var url = require('url');
 var coins = require("./coins.js");
 var credentials = require("./credentials.js");
 
-var currentCoin = process.env.BTCEXP_COIN || "BCH";
+var currentCoin = process.env.NEXEXP_COIN || "NEX";
 
 var rpcCred = credentials.rpc;
 
@@ -19,13 +19,13 @@ if (rpcCred.cookie && !rpcCred.username && !rpcCred.password && fs.existsSync(rp
   }
 }
 
-var cookieSecret = process.env.BTCEXP_COOKIE_SECRET
+var cookieSecret = process.env.NEXEXP_COOKIE_SECRET
  || (rpcCred.password && crypto.createHmac('sha256', JSON.stringify(rpcCred))
-                               .update('btc-rpc-explorer-cookie-secret').digest('hex'))
+                               .update('nex-rpc-explorer-cookie-secret').digest('hex'))
  || "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
 
 
-var electrumXServerUriStrings = (process.env.BTCEXP_ELECTRUMX_SERVERS || "").split(',').filter(Boolean);
+var electrumXServerUriStrings = (process.env.NEXEXP_ELECTRUMX_SERVERS || "").split(',').filter(Boolean);
 var electrumXServers = [];
 for (var i = 0; i < electrumXServerUriStrings.length; i++) {
   var uri = url.parse(electrumXServerUriStrings[i]);
@@ -33,13 +33,13 @@ for (var i = 0; i < electrumXServerUriStrings.length; i++) {
   electrumXServers.push({protocol:uri.protocol.substring(0, uri.protocol.length - 1), host:uri.hostname, port:parseInt(uri.port)});
 }
 
-["BTCEXP_DEMO", "BTCEXP_PRIVACY_MODE", "BTCEXP_NO_INMEMORY_RPC_CACHE", "BTCEXP_UI_SHOW_RPC", "BTCEXP_HEADER_BY_HEIGHT_SUPPORT", "BTCEXP_BLOCK_BY_HEIGHT_SUPPORT"].forEach(function(item) {
+["NEXEXP_DEMO", "NEXEXP_PRIVACY_MODE", "NEXEXP_NO_INMEMORY_RPC_CACHE", "NEXEXP_UI_SHOW_RPC", "NEXEXP_HEADER_BY_HEIGHT_SUPPORT", "NEXEXP_BLOCK_BY_HEIGHT_SUPPORT"].forEach(function(item) {
   if (process.env[item] === undefined) {
     process.env[item] = "false";
   }
 });
 
-["BTCEXP_NO_RATES", "BTCEXP_UI_SHOW_TOOLS_SUBHEADER", "BTCEXP_SLOW_DEVICE_MODE", "BTCEXP_HIDE_IP"].forEach(function(item) {
+["NEXEXP_NO_RATES", "NEXEXP_UI_SHOW_TOOLS_SUBHEADER", "NEXEXP_SLOW_DEVICE_MODE", "NEXEXP_HIDE_IP"].forEach(function(item) {
   if (process.env[item] === undefined) {
     process.env[item] = "true";
   }
@@ -50,7 +50,7 @@ var siteToolsJSON = [
   { "name": "Peers", "url": "/peers", "desc": "Detailed info about the peers connected to this node.", "fontawesome": "fas fa-sitemap" },
   { "name": "Browse Blocks", "url": "/blocks", "desc": "Browse all blocks in the blockchain.", "fontawesome": "fas fa-cubes" },
   { "name": "Transaction Stats", "url": "/tx-stats", "desc": "See graphs of total transaction volume and transaction rates.", "fontawesome": "fas fa-chart-bar" },
-  { "name": "Mempool Summary", "url": "/mempool-summary", "desc": "Detailed summary of the current mempool for this node.", "fontawesome": "fas fa-clipboard-list" },
+  { "name": "Txpool Summary", "url": "/txpool-summary", "desc": "Detailed summary of the current txpool for this node.", "fontawesome": "fas fa-clipboard-list" },
   { "name": "Unconfirmed Txs", "url": "/unconfirmed-tx", "desc": "Browse unconfirmed/pending transactions.", "fontawesome": "fas fa-unlock-alt" },
   { "name": `${coins[currentCoin].name} Fun`, "url": "/fun", "desc": "See fun/interesting historical blockchain data.", "fontawesome": "fas fa-certificate" },
   { "name": "Mining Summary", "url": "/mining-summary", "desc": "Summary of recent data about miners.", "fontawesome": "fas fa-chart-pie" },
@@ -60,7 +60,7 @@ var siteToolsJSON = [
   { "name": "Decoder", "url": "/decoder", "desc": "Transaction/script decoder.", "fontawesome": "fas fa-flask" }
 ];
 
-if (process.env.BTCEXP_UI_SHOW_RPC.toLowerCase() === "true") {
+if (process.env.NEXEXP_UI_SHOW_RPC.toLowerCase() === "true") {
   siteToolsJSON.push({ "name": "RPC Browser", "url": "/rpc-browser", "desc": "Browse the RPC functionality of this node. See docs and execute commands.", "fontawesome": "fas fa-book" })
   siteToolsJSON.push({ "name": "RPC Terminal", "url": "/rpc-terminal", "desc": "Directly execute RPCs against this node.", "fontawesome": "fas fa-terminal" })
 }
@@ -70,21 +70,21 @@ module.exports = {
 
   cookieSecret: cookieSecret,
 
-  privacyMode: (process.env.BTCEXP_PRIVACY_MODE.toLowerCase() == "true"),
-  slowDeviceMode: (process.env.BTCEXP_SLOW_DEVICE_MODE.toLowerCase() == "true"),
-  demoSite: (process.env.BTCEXP_DEMO.toLowerCase() == "true"),
-  showRpc: (process.env.BTCEXP_UI_SHOW_RPC.toLowerCase() === "true"),
-  queryExchangeRates: (process.env.BTCEXP_NO_RATES.toLowerCase() != "true"),
-  noInmemoryRpcCache: (process.env.BTCEXP_NO_INMEMORY_RPC_CACHE.toLowerCase() == "true"),
-  headerByHeightSupport: (process.env.BTCEXP_HEADER_BY_HEIGHT_SUPPORT.toLowerCase() == "true"),
-  blockByHeightSupport: (process.env.BTCEXP_BLOCK_BY_HEIGHT_SUPPORT.toLowerCase() == "true"),
-  hideIp: (process.env.BTCEXP_HIDE_IP.toLowerCase() == "true"),
+  privacyMode: (process.env.NEXEXP_PRIVACY_MODE.toLowerCase() == "true"),
+  slowDeviceMode: (process.env.NEXEXP_SLOW_DEVICE_MODE.toLowerCase() == "true"),
+  demoSite: (process.env.NEXEXP_DEMO.toLowerCase() == "true"),
+  showRpc: (process.env.NEXEXP_UI_SHOW_RPC.toLowerCase() === "true"),
+  queryExchangeRates: (process.env.NEXEXP_NO_RATES.toLowerCase() != "true"),
+  noInmemoryRpcCache: (process.env.NEXEXP_NO_INMEMORY_RPC_CACHE.toLowerCase() == "true"),
+  headerByHeightSupport: (process.env.NEXEXP_HEADER_BY_HEIGHT_SUPPORT.toLowerCase() == "true"),
+  blockByHeightSupport: (process.env.NEXEXP_BLOCK_BY_HEIGHT_SUPPORT.toLowerCase() == "true"),
+  hideIp: (process.env.NEXEXP_HIDE_IP.toLowerCase() == "true"),
 
-  rpcConcurrency: (process.env.BTCEXP_RPC_CONCURRENCY || 10),
+  rpcConcurrency: (process.env.NEXEXP_RPC_CONCURRENCY || 10),
 
   rpcBlacklist:
-    process.env.BTCEXP_RPC_ALLOWALL  ? []
-  : process.env.BTCEXP_RPC_BLACKLIST ? process.env.BTCEXP_RPC_BLACKLIST.split(',').filter(Boolean)
+    process.env.NEXEXP_RPC_ALLOWALL  ? []
+  : process.env.NEXEXP_RPC_BLACKLIST ? process.env.NEXEXP_RPC_BLACKLIST.split(',').filter(Boolean)
   : [
     "addnode",
     "backupwallet",
@@ -133,7 +133,7 @@ module.exports = {
     "reconsiderblock",
     "removeprunedfunds",
     "rescanblockchain",
-    "savemempool",
+    "savetxpool",
     "sendfrom",
     "sendmany",
     "sendtoaddress",
@@ -158,10 +158,10 @@ module.exports = {
     "walletpassphrasechange",
   ],
 
-  addressApi:process.env.BTCEXP_ADDRESS_API,
+  addressApi:process.env.NEXEXP_ADDRESS_API,
   electrumXServers:electrumXServers,
 
-  redisUrl:process.env.BTCEXP_REDIS_URL,
+  redisUrl:process.env.NEXEXP_REDIS_URL,
 
   site: {
     homepage:{
@@ -176,17 +176,13 @@ module.exports = {
     },
     valueDisplayMaxLargeDigits: 4,
     header:{
-      showToolsSubheader:(process.env.BTCEXP_UI_SHOW_TOOLS_SUBHEADER == "true"),
+      showToolsSubheader:(process.env.NEXEXP_UI_SHOW_TOOLS_SUBHEADER == "true"),
       dropdowns:[
         {
           title:"Related Sites",
           links:[
-            // TODO: find better images for this URLs, in the mean time use bch.svg
             {name: "Bitcoin Unlimited", url:"https://bitcoinunlimited.info", imgUrl:"/img/logo/bu.png"},
-            {name: "Bitcoin Cash Nodes", url:"https://cashnodes.io", imgUrl:"/img/logo/bch.svg"},
-            {name: "BCH PoW Monitoring", url:"https://fork.lol", imgUrl:"/img/logo/fork.png"},
-            {name: "BCH Specification", url:"https://reference.cash", imgUrl:"/img/logo/refcash.ico"},
-            {name: "Bitcoin Cash Node", url:"https://bitcoincashnode.org/", imgUrl:"/img/logo/bchn.png"},
+            {name: "Nexa", url:"https://nexa.org", imgUrl:"/img/logo/nex.svg"},
           ]
         }
       ]

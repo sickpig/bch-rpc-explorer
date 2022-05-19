@@ -2,7 +2,7 @@ extends layout
 
 block headContent
 	+title('Home')
-	
+
 block content
 	if (blockChainInfo == null)
 		div.alert.alert-warning
@@ -35,7 +35,7 @@ block content
 							i.fas.fa-code-branch.mr-2
 							span.mr-2 Fork 
 							span.badge.bg-white.text-dark #{global.sourcecodeProjectMetadata.forks_count}
-						
+
 						if (!crawlerBot)
 							button.btn.btn-primary.btn-sm.mb-1(type="button", data-toggle="modal", data-target="#exampleModalCenter")
 								i.fas.fa-heart.mr-2
@@ -73,14 +73,14 @@ block content
 						div.row
 							div.col
 								h3.h6.mb-0 Tools
-								
+
 							div.col.text-right
 								a(href="/tools") More info &raquo;
 						hr
 
 						include includes/tools-card.pug
-		
-		
+
+
 		div.row.mb-3
 			div.col
 				div.card.shadow-sm
@@ -88,7 +88,7 @@ block content
 						div.row
 							div.col
 								h3.h6.mb-0 Latest Blocks
-								
+
 							div.col.text-right
 								a(href="/blocks") See more &raquo;
 
@@ -106,7 +106,7 @@ block content
 							div.row
 								div.col
 									h3.h6.mb-0 Transaction Stats
-									
+
 								div.col.text-right
 									a(href="/tx-stats") See more &raquo;
 
@@ -131,7 +131,7 @@ block content
 
 								div.col-lg-6
 									h4.h6.text-center Tx Rate, 24hr
-									
+
 									script var txRateDataDay = [];
 									each item, index in txStats.txCountStats.txRates
 										script txRateDataDay.push({x:#{item.x}, y:#{item.y}});
@@ -141,5 +141,11 @@ block content
 
 
 block endOfBody
-	- var reloadPollUrl = `/api/check-for-new-block/${blockChainInfo.blocks}`;
-		include includes/reload-poll.pug
+	script.
+		if (typeof blockChainInfo !== 'undefined') {
+			console.log(blockChainInfo);
+			var reloadPollUrl = `/api/check-for-new-block/${blockChainInfo.blocks}`;
+		} else {
+			var reloadPollUrl = "/api/check-for-new-block/0";
+		}
+	include includes/reload-poll.pug

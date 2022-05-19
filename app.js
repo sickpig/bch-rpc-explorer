@@ -7,7 +7,7 @@ var path = require('path');
 var dotenv = require("dotenv");
 var fs = require('fs');
 
-var configPaths = [ path.join(os.homedir(), '.config', 'bch-rpc-explorer.env'), path.join(process.cwd(), '.env') ];
+var configPaths = [ path.join(os.homedir(), '.config', 'nex-rpc-explorer.env'), path.join(process.cwd(), '.env') ];
 configPaths.filter(fs.existsSync).forEach(path => {
 	console.log('Loading env file:', path);
 	dotenv.config({ path });
@@ -18,10 +18,10 @@ global.cacheStats = {};
 // debug module is already loaded by the time we do dotenv.config
 // so refresh the status of DEBUG env var
 var debug = require("debug");
-debug.enable(process.env.DEBUG || "bchexp:app,bchexp:error");
+debug.enable(process.env.DEBUG || "nexexp:app,nexexp:error");
 
-var debugLog = debug("bchexp:app");
-var debugLogError = debug("bchexp:error");
+var debugLog = debug("nexexp:app");
+var debugLogError = debug("nexexp:error");
 
 var express = require('express');
 var favicon = require('serve-favicon');
@@ -46,7 +46,7 @@ var addressApi = require("./app/api/addressApi.js");
 var electrumAddressApi = require("./app/api/electrumAddressApi.js");
 var coreApi = require("./app/api/coreApi.js");
 var auth = require('./app/auth.js');
-var markdown = require("markdown-it");
+var markdown = require("markdown-it")();
 
 var package_json = require('./package.json');
 global.appVersion = package_json.version;
@@ -71,9 +71,9 @@ app.engine('pug', (path, options, fn) => {
 app.set('view engine', 'pug');
 
 // basic http authentication
-if (process.env.BTCEXP_BASIC_AUTH_PASSWORD) {
+if (process.env.NEXEXP_BASIC_AUTH_PASSWORD) {
 	app.disable('x-powered-by');
-	app.use(auth(process.env.BTCEXP_BASIC_AUTH_PASSWORD));
+	app.use(auth(process.env.NEXEXP_BASIC_AUTH_PASSWORD));
 }
 
 // uncomment after placing your favicon in /public
@@ -207,7 +207,7 @@ function onRpcConnectionVerified(getnetworkinfo, getblockchaininfo) {
 
 	global.getnetworkinfo = getnetworkinfo;
 
-	var bitcoinCoreVersionRegex = /^.*\/BCH Unlimited\:(.*)\/.*$/;
+	var bitcoinCoreVersionRegex = /^.*\/Nexa\:(.*)\/.*$/;
 
 	var match = bitcoinCoreVersionRegex.exec(getnetworkinfo.subversion);
 	if (match) {
@@ -245,7 +245,7 @@ function onRpcConnectionVerified(getnetworkinfo, getblockchaininfo) {
 		// short-circuit: force all RPC calls to pass their version checks - this will likely lead to errors / instability / unexpected results
 		global.btcNodeSemver = "1000.1000.0"
 
-		debugLogError(`Unable to parse node version string: ${getnetworkinfo.subversion} - RPC versioning will likely be unreliable. Is your node a version of Bitcoin Core?`);
+		debugLogError(`Unable to parse node version string: ${getnetworkinfo.subversion} - RPC versioning will likely be unreliable. Is your node a compatible with the Nexa protocol?`);
 	}
 
 	debugLog(`RPC Connected: version=${getnetworkinfo.version} subversion=${getnetworkinfo.subversion}, parsedVersion(used for RPC versioning)=${global.btcNodeSemver}, protocolversion=${getnetworkinfo.protocolversion}, chain=${getblockchaininfo.chain}, services=${services}`);
@@ -360,7 +360,7 @@ function refreshNetworkVolumes() {
 				debugLog(`Network volume: ${JSON.stringify(global.networkVolume)}`);
 
 			} else {
-				debugLog("Unable to load network volume, likely due to bitcoind version older than BCH Unlimited 1.8.0 (the first version to support getblockstats).");
+				debugLog("Unable to load network volume.");
 			}
 		});
 	});
@@ -452,7 +452,7 @@ app.continueStartup = function() {
 	if (config.addressApi) {
 		var supportedAddressApis = addressApi.getSupportedAddressApis();
 		if (!supportedAddressApis.includes(config.addressApi)) {
-			utils.logError("32907ghsd0ge", `Unrecognized value for BTCEXP_ADDRESS_API: '${config.addressApi}'. Valid options are: ${supportedAddressApis}`);
+			utils.logError("32907ghsd0ge", `Unrecognized value for NEXEXP_ADDRESS_API: '${config.addressApi}'. Valid options are: ${supportedAddressApis}`);
 		}
 
 		if (config.addressApi == "electrumx") {
@@ -464,7 +464,7 @@ app.continueStartup = function() {
 					utils.logError("31207ugf4e0fed", err, {electrumXServers:config.electrumXServers});
 				});
 			} else {
-				utils.logError("327hs0gde", "You must set the 'BTCEXP_ELECTRUMX_SERVERS' environment variable when BTCEXP_ADDRESS_API=electrumx.");
+				utils.logError("327hs0gde", "You must set the 'NEXEXP_ELECTRUMX_SERVERS' environment variable when NEXEXP_ADDRESS_API=electrumx.");
 			}
 		}
 	}

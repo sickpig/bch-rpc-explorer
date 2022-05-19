@@ -82,7 +82,7 @@ block content
 							div.row
 								div.summary-table-label Chain Lenght
 								div.summary-table-content.text-monospace
-									span #{mempoolDetails.entry.ancestorcount + mempoolDetails.entry.descendantcount -1}
+									span #{txpoolDetails.entry.ancestorcount + txpoolDetails.entry.descendantcount -1}
 
 						if (isTxConfirmed)
 							div.row
@@ -287,15 +287,15 @@ block content
 							- blockHeight = result.blockHeader.height;
 						include includes/transaction-io-details.pug
 
-				if (mempoolDetails)
-					if (mempoolDetails.ancestors.length > 0)
+				if (txpoolDetails)
+					if (txpoolDetails.ancestors.length > 0)
 						div.card.shadow-sm.mb-3
 							div.card-body.px-2.px-md-3
 								h3.h6.mb-0
 									// the below is not trailing spaces, it is actually needed
-									span #{mempoolDetails.ancestors.length.toLocaleString()} 
+									span #{txpoolDetails.ancestors.length.toLocaleString()} 
 
-									if (mempoolDetails.ancestors.length == 1)
+									if (txpoolDetails.ancestors.length == 1)
 										span Ancestor
 									else
 										span Ancestors
@@ -303,24 +303,24 @@ block content
 									hr
 
 								ol.mb-0
-									each ancestorTxid, ancestorIndex in mempoolDetails.ancestors
+									each ancestorTxid, ancestorIndex in txpoolDetails.ancestors
 										li
 											a.text-monospace(href=("/tx/" + ancestorTxid)) #{ancestorTxid}
 
-					if (mempoolDetails.descendants.length > 0)
+					if (txpoolDetails.descendants.length > 0)
 						div.card.shadow-sm.mb-3
 							div.card-body.px-2.px-md-3
 								h3.h6.mb-0
 									// the below is not trailing spaces, it is actually needed
-									span #{mempoolDetails.descendants.length.toLocaleString()} 
-									if (mempoolDetails.descendants.length == 1)
+									span #{txpoolDetails.descendants.length.toLocaleString()} 
+									if (txpoolDetails.descendants.length == 1)
 										span Descendant
 									else
 										span Descendants
 
 
 								ol.mb-0
-									each descendantTxid, descendantIndex in mempoolDetails.descendants
+									each descendantTxid, descendantIndex in txpoolDetails.descendants
 										li
 											a.text-monospace(href=("/tx/" + descendantTxid)) #{descendantTxid}
 
@@ -400,10 +400,10 @@ block content
 							pre
 								code.json.bg-light(data-lang="json") #{JSON.stringify(utxos, null, 4)}
 
-				if (mempoolDetails)
-					h3.h5 Mempool Details
+				if (txpoolDetails)
+					h3.h5 Txpool Details
 					div.highlight
 						pre
-							code.json.bg-light(data-lang="json") #{JSON.stringify(mempoolDetails, null, 4)}
+							code.json.bg-light(data-lang="json") #{JSON.stringify(txpoolDetails, null, 4)}
 
 				//pre #{JSON.stringify(result.txInputs, null, 4)}

@@ -85,12 +85,12 @@ div.row.index-summary
 						span Unconfirmed Txns
 					td.text-right.text-monospace
 						- var colorClass = "text-success";
-						if (mempoolInfo.size > 7000)
+						if (txpoolInfo.size > 7000)
 							- colorClass = "text-warning";
-						if (mempoolInfo.size > 11000)
+						if (txpoolInfo.size > 11000)
 							- colorClass = "text-danger";
 
-						span(class=colorClass) #{mempoolInfo.size.toLocaleString()}
+						span(class=colorClass) #{txpoolInfo.size.toLocaleString()}
 
 	div(class=colClass)
 		h5.h6 Blockchain

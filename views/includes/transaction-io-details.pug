@@ -30,12 +30,12 @@ div.row.text-monospace
 							a(data-toggle="tooltip", title=("Input #" + txVinIndex.toLocaleString()), style="white-space: nowrap;")
 								span.font-weight-bold &gt; 
 								small.d-inline.d-md-none Input 
-								
+
 								if (tx.vin.length > 999)
 									small.word-wrap ##{txVinIndex}
 								else
 									span ##{txVinIndex.toLocaleString()}
-									
+
 								if (tx.vin.length > 0)
 									small.d-inline.d-md-none.font-weight-light.text-muted  / #{(tx.vin.length - 1).toLocaleString()}
 
@@ -44,7 +44,7 @@ div.row.text-monospace
 								div.tx-io-desc
 									if (txVin.coinbase)
 										small.data-tag.bg-success.mr-2(title="Coinbase transactions are special transactions created by the miner of a block. They distribute the block reward (subsidy) as the miner chooses, along with all of the fees paid by transactions included in the block.", data-toggle="tooltip") coinbase
-										
+
 										div.pt-1
 											small.font-weight-bold(tistle="UTF-8 encoded", data-toggle="tooltip") data
 											small (utf-8) - 
@@ -75,8 +75,8 @@ div.row.text-monospace
 												if (deltaTYears > 5)
 													span.mr-2(title=`This UTXO was very old! It existed for ${parseInt(deltaTYears)}+ years - from ${moment.utc(new Date(vout.utxoTime * 1000)).format('MMM D, Y')} until ${moment.utc(new Date(tx.time * 1000)).format('MMM D, Y')} - before being spent (destroyed) in this transaction!`, data-toggle="tooltip")
 														i.fas.fa-certificate.text-primary
-												
-											
+
+
 											a(href=("/tx/" + txInput.txid + "#output-" + txVin.vout)) #{utils.ellipsize(txInput.txid, 26)}
 												span  ##{txVin.vout}
 
@@ -139,9 +139,9 @@ div.row.text-monospace
 						span.d-block.d-md-none Total Input: 
 						- var currencyValue = totalIOValues.input;
 						include ./value-display.pug
-					
-			
-			
+
+
+
 
 	div.col-lg-6
 		- var maxRegularRowCount = (txIOHighlightAddress != null ? config.site.addressPage.txOutputMaxDefaultDisplay : 10000000);
@@ -166,12 +166,12 @@ div.row.text-monospace
 						a(data-toggle="tooltip", title=("Output #" + voutIndex.toLocaleString()), style="white-space: nowrap;")
 							span.font-weight-bold &lt; 
 							small.d-inline.d-md-none Output 
-							
+
 							if (tx.vout.length > 999)
 								small.word-wrap ##{voutIndex}
 							else
 								span ##{voutIndex.toLocaleString()}
-							
+
 							if (tx.vout.length > 0)
 								small.d-inline.d-md-none.font-weight-light.text-muted  / #{(tx.vout.length - 1).toLocaleString()}
 
@@ -200,7 +200,7 @@ div.row.text-monospace
 									else if (vout.scriptPubKey.asm && vout.scriptPubKey.asm.startsWith('OP_RETURN '))
 										div.mb-tiny
 											small.data-tag.bg-primary OP_RETURN
-										
+
 										div
 											small.font-weight-bold data
 											small (utf-8) - 
@@ -225,7 +225,7 @@ div.row.text-monospace
 											small.font-weight-bold asm
 											br
 											small.word-wrap #{vout.scriptPubKey.asm}
-										
+
 										div
 											small.font-weight-bold hex
 											br

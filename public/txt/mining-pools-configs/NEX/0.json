@@ -1,0 +1,15 @@
+{
+    "coinbase_tags" : {
+        "match string": {
+            "name": "name",
+            "link": "url"
+        }
+    },
+    "payout_addresses" : {
+        "nexa:qrz7nferavt263h8v2nrm9zssnfrz34d8spzpd3axa": {
+            "name": "name",
+            "link": "url"
+        }
+
+    }
+}

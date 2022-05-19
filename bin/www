@@ -3,11 +3,11 @@ var debug = require('debug')('www');
 var app = require('../app');
 
 const v8 = require('v8');
-v8.setFlagsFromString("--max_old_space_size=" + (process.env.BTCEXP_OLD_SPACE_MAX_SIZE || 1024));
-debug(`Set max_old_space_size to ${(process.env.BTCEXP_OLD_SPACE_MAX_SIZE || 1024)} MB`);
+v8.setFlagsFromString("--max_old_space_size=" + (process.env.NEXEXP_OLD_SPACE_MAX_SIZE || 1024));
+debug(`Set max_old_space_size to ${(process.env.NEXEXP_OLD_SPACE_MAX_SIZE || 1024)} MB`);
 
-app.set('port', process.env.PORT || process.env.BTCEXP_PORT || 3002);
-app.set('host', process.env.BTCEXP_HOST || '127.0.0.1');
+app.set('port', process.env.PORT || process.env.NEXEXP_PORT || 3002);
+app.set('host', process.env.NEXEXP_HOST || '127.0.0.1');
 app.set('env', 'production')
 
 var server = app.listen(app.get('port'), app.get('host'), function() {

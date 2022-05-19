@@ -1,16 +1,16 @@
 extends layout
 
 block headContent
-	+title('Mempool Summary')
+	+title('Txpool Summary')
 
 block content
-	h1.h3 Mempool Summary
+	h1.h3 Txpool Summary
 	hr
 
 	div#progress-wrapper.mb-huge
 		div.card.shadow-sm.mb-3
 			div.card-body
-				h4.h6 Loading mempool transactions: 
+				h4.h6 Loading txpool transactions: 
 					span(id="progress-text")
 				div.progress.mt-2(id="progress-bar", style="height: 7px;")
 					div.progress-bar(id="data-progress", role="progressbar", aria-valuenow="0", aria-valuemin="0" ,aria-valuemax="100")
@@ -48,7 +48,7 @@ block content
 				h3.h6.mb-0 Transactions by fee rate
 				hr
 
-				canvas.mb-3(id="mempoolBarChart", height="100")
+				canvas.mb-3(id="txpoolBarChart", height="100")
 
 				div.table-responsive
 					table.table.table-striped.mb-3
@@ -86,15 +86,15 @@ block endOfBody
 	script(src="/js/chart.bundle.min.js", integrity="sha384-qgOtiGNaHh9fVWUnRjyHlV39rfbDcvPPkEzL1RHvsHKbuqUqM6uybNuVnghY2z4/")
 	script(src='/js/decimal.min.js', integrity="sha384-zcNJYsoavmOdYj5MgXBBIO8scbka8MlR5mSGt0GKjdqbm26j4w0yVyOb9s5rY7Jh")
 	script.
-		var txidChunks = !{JSON.stringify(mempooltxidChunks)};
+		var txidChunks = !{JSON.stringify(txpooltxidChunks)};
 		var satoshiPerByteBucketMaxima = !{JSON.stringify(satoshiPerByteBucketMaxima)};
 		var inputChunkSize = !{inputChunkSize};
 
 		$(document).ready(function() {
-			loadMempool(txidChunks, inputChunkSize, txidChunks.length * inputChunkSize);
+			loadTxpool(txidChunks, inputChunkSize, txidChunks.length * inputChunkSize);
 		});
 
-		function loadMempool(txidChunks, chunkSize, count) {
+		function loadTxpool(txidChunks, chunkSize, count) {
 			var chunkStrs = [];
 			
 			for (var i = 0; i < txidChunks.length; i++) {
@@ -150,8 +150,8 @@ block endOfBody
 
 
 				// fee rate chart
-				var ctx1 = document.getElementById("mempoolBarChart").getContext('2d');
-				var mempoolBarChart = new Chart(ctx1, {
+				var ctx1 = document.getElementById("txpoolBarChart").getContext('2d');
+				var txpoolBarChart = new Chart(ctx1, {
 					type: 'bar',
 					data: {
 						labels: feeRateGraphData.feeBucketLabels,
@@ -278,7 +278,7 @@ block endOfBody
 				return;
 			}
 
-			var url = `/api/mempool-txs/${chunkStrs[chunkIndex]}`;
+			var url = `/api/txpool-txs/${chunkStrs[chunkIndex]}`;
 
 			$.ajax({
 				url: url
@@ -371,18 +371,18 @@ block endOfBody
 			var sizes = [];
 
 			for (var i = 0; i < rawdata.length; i++) {
-				var txMempoolInfo = rawdata[i].entry;
+				var txTxpoolInfo = rawdata[i].entry;
 
-				if (txMempoolInfo.modifiedfee) {
-					var fee = txMempoolInfo.modifiedfee;
+				if (txTxpoolInfo.modifiedfee) {
+					var fee = txTxpoolInfo.modifiedfee;
 				}
 				else
 				{
-					var fee = txMempoolInfo.fees.modified;
+					var fee = txTxpoolInfo.fees.modified;
 				}
 				var feePerByte = fee / size;
-				var size = txMempoolInfo.size;
-				var age = Date.now() / 1000 - txMempoolInfo.time;
+				var size = txTxpoolInfo.size;
+				var age = Date.now() / 1000 - txTxpoolInfo.time;
 
 				if (fee > maxFee) {
 					maxFee = fee;
@@ -490,18 +490,18 @@ block endOfBody
 
 			var satsMultiplier = !{coinConfig.baseCurrencyUnit.multiplier};
 			for (var x = 0; x < rawdata.length; x++) {
-				var txMempoolInfo = rawdata[x].entry;
-				if (txMempoolInfo.modifiedfee) {
-					var fee = txMempoolInfo.modifiedfee;
+				var txTxpoolInfo = rawdata[x].entry;
+				if (txTxpoolInfo.modifiedfee) {
+					var fee = txTxpoolInfo.modifiedfee;
 				}
 				else
 				{
-					var fee = txMempoolInfo.fees.modified;
+					var fee = txTxpoolInfo.fees.modified;
 				}
 				var feePerByte = fee / size;
-				var size = txMempoolInfo.size;
+				var size = txTxpoolInfo.size;
 				var satoshiPerByte = feePerByte * satsMultiplier;
-				var age = Date.now() / 1000 - txMempoolInfo.time;
+				var age = Date.now() / 1000 - txTxpoolInfo.time;
 
 				var addedToBucket = false;
 				for (var i = 0; i < satoshiPerByteBucketMaxima.length; i++) {
@@ -523,12 +523,12 @@ block endOfBody
 				}
 
 				summary["count"]++;
-				if (txMempoolInfo.modifiedfee) {
-					summary["totalFees"] += txMempoolInfo.modifiedfee;
+				if (txTxpoolInfo.modifiedfee) {
+					summary["totalFees"] += txTxpoolInfo.modifiedfee;
 				}
 				else
 				{
-					summary["totalFees"] += txMempoolInfo.fees.modified;
+					summary["totalFees"] += txTxpoolInfo.fees.modified;
 				}
 
 				summary["totalBytes"] += size;

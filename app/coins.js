@@ -1,9 +1,7 @@
-var bch = require("./coins/bch.js");
-var bab = require("./coins/bab.js");
+var nex = require("./coins/nex.js");
 
 module.exports = {
-  "BCH": bch,
-  "BAB": bab,
+  "NEX": nex,
 
-  "coins":["BCH", "BAB"]
+  "coins":["NEX"]
 };

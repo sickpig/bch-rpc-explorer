@@ -1,6 +1,6 @@
 var debug = require('debug');
 
-var debugLog = debug("bchexp:rpc");
+var debugLog = debug("nexexp:rpc");
 
 var async = require("async");
 var semver = require("semver");
@@ -22,8 +22,6 @@ var rpcQueue = async.queue(function(task, callback) {
 
 }, config.rpcConcurrency);
 
-var minRpcVersions = {getblockstats:"1.8.0"};
-
 global.rpcStats = {};
 
 
@@ -40,8 +38,8 @@ function getNetTotals() {
 	return getRpcData("getnettotals");
 }
 
-function getMempoolInfo() {
-	return getRpcData("getmempoolinfo");
+function getTxpoolInfo() {
+	return getRpcData("gettxpoolinfo");
 }
 
 function getMiningInfo() {
@@ -56,8 +54,8 @@ function getPeerInfo() {
 	return getRpcData("getpeerinfo");
 }
 
-function getMempoolTxids() {
-	return getRpcDataWithParams({method:"getrawmempool", parameters:[false]});
+function getTxpoolTxids() {
+	return getRpcDataWithParams({method:"getrawtxpool", parameters:[false]});
 }
 
 function getNetworkHashrate(blockCount=144) {
@@ -65,18 +63,12 @@ function getNetworkHashrate(blockCount=144) {
 }
 
 function getBlockStats(hash_or_height) {
-	if (semver.gte(global.btcNodeSemver, minRpcVersions.getblockstats)) {
-		if ((hash_or_height == coinConfig.genesisBlockHashesByNetwork[global.activeBlockchain] || hash_or_height == 0) && coinConfig.genesisBlockStatsByNetwork[global.activeBlockchain]) {
-			return new Promise(function(resolve, reject) {
-				resolve(coinConfig.genesisBlockStatsByNetwork[global.activeBlockchain]);
-			});
-
-		} else {
-			return getRpcDataWithParams({method:"getblockstats", parameters:[hash_or_height]});
-		}
+	if ((hash_or_height == coinConfig.genesisBlockHashesByNetwork[global.activeBlockchain] || hash_or_height == 0) && coinConfig.genesisBlockStatsByNetwork[global.activeBlockchain]) {
+		return new Promise(function(resolve, reject) {
+			resolve(coinConfig.genesisBlockStatsByNetwork[global.activeBlockchain]);
+		});
 	} else {
-		// unsupported
-		return unsupportedPromise(minRpcVersions.getblockstats);
+		return getRpcDataWithParams({method:"getblockstats", parameters:[hash_or_height]});
 	}
 }
 
@@ -93,15 +85,15 @@ function getUtxoSetSummary() {
 	return getRpcData("gettxoutsetinfo");
 }
 
-function getRawMempool() {
+function getRawTxpool() {
 	return new Promise(function(resolve, reject) {
-		getRpcDataWithParams({method:"getrawmempool", parameters:[false]}).then(function(txids) {
+		getRpcDataWithParams({method:"getrawtxpool", parameters:[false]}).then(function(txids) {
 			var promises = [];
 
 			for (var i = 0; i < txids.length; i++) {
 				var txid = txids[i];
 
-				promises.push(getRawMempoolEntry(txid));
+				promises.push(getRawTxpoolEntry(txid));
 			}
 
 			Promise.all(promises).then(function(results) {
@@ -125,9 +117,9 @@ function getRawMempool() {
 	});
 }
 
-function getRawMempoolEntry(txid) {
+function getRawTxpoolEntry(txid) {
 	return new Promise(function(resolve, reject) {
-		getRpcDataWithParams({method:"getmempoolentry", parameters:[txid]}).then(function(result) {
+		getRpcDataWithParams({method:"gettxpoolentry", parameters:[txid]}).then(function(result) {
 			result.txid = txid;
 
 			resolve(result);
@@ -163,8 +155,6 @@ function getBlockTemplate(args = {}) {
 }
 
 function getRawTransaction(txid) {
-	debugLog("getRawTransaction: %s", txid);
-
 	return new Promise(function(resolve, reject) {
 		if (coins[config.coin].genesisCoinbaseTransactionIdsByNetwork[global.activeBlockchain] && txid == coins[config.coin].genesisCoinbaseTransactionIdsByNetwork[global.activeBlockchain]) {
 			// copy the "confirmations" field from genesis block to the genesis-coinbase tx
@@ -199,6 +189,7 @@ function getRawTransaction(txid) {
 				resolve(result);
 
 			}).catch(function(err) {
+				debugLog(err);
 				reject(err);
 			});
 		}
@@ -230,28 +221,29 @@ function getUtxo(txid, outputIndex) {
 	});
 }
 
-function getMempoolTxDetails(txid, includeAncDec=true) {
-	debugLog("getMempoolTxDetails: %s", txid);
+function getTxpoolTxDetails(txid, includeAncDec=true) {
+	debugLog("getTxpoolTxDetails: %s", txid);
 
 	var promises = [];
 
-	var mempoolDetails = {};
+	var txpoolDetails = {};
 
 	promises.push(new Promise(function(resolve, reject) {
-		getRpcDataWithParams({method:"getmempoolentry", parameters:[txid]}).then(function(result) {
-			mempoolDetails.entry = result;
+		getRpcDataWithParams({method:"getxpoolentry", parameters:[txid]}).then(function(result) {
+			txpoolDetails.entry = result;
 
 			resolve();
 
 		}).catch(function(err) {
+		debugLog(err);
 			reject(err);
 		});
 	}));
 
 	if (includeAncDec) {
 		promises.push(new Promise(function(resolve, reject) {
-			getRpcDataWithParams({method:"getmempoolancestors", parameters:[txid]}).then(function(result) {
-				mempoolDetails.ancestors = result;
+			getRpcDataWithParams({method:"gettxpoolancestors", parameters:[txid]}).then(function(result) {
+				txpoolDetails.ancestors = result;
 
 				resolve();
 
@@ -261,8 +253,8 @@ function getMempoolTxDetails(txid, includeAncDec=true) {
 		}));
 
 		promises.push(new Promise(function(resolve, reject) {
-			getRpcDataWithParams({method:"getmempooldescendants", parameters:[txid]}).then(function(result) {
-				mempoolDetails.descendants = result;
+			getRpcDataWithParams({method:"gettxpooldescendants", parameters:[txid]}).then(function(result) {
+				txpoolDetails.descendants = result;
 
 				resolve();
 
@@ -274,7 +266,7 @@ function getMempoolTxDetails(txid, includeAncDec=true) {
 
 	return new Promise(function(resolve, reject) {
 		Promise.all(promises).then(function() {
-			resolve(mempoolDetails);
+			resolve(txpoolDetails);
 
 		}).catch(function(err) {
 			reject(err);
@@ -311,7 +303,7 @@ function getRpcData(cmd) {
 
 					if (Array.isArray(result) && result.length == 1) {
 						var result0 = result[0];
-						
+
 						if (result0 && result0.name && result0.name == "RpcError") {
 							logStats(cmd, false, new Date().getTime() - startTime, false);
 
@@ -342,7 +334,7 @@ function getRpcData(cmd) {
 				}
 			});
 		};
-		
+
 		rpcQueue.push({rpcCall:rpcCall});
 	});
 }
@@ -395,7 +387,7 @@ function getRpcDataWithParams(request) {
 				}
 			});
 		};
-		
+
 		rpcQueue.push({rpcCall:rpcCall});
 	});
 }
@@ -431,16 +423,16 @@ module.exports = {
 	getBlockchainInfo: getBlockchainInfo,
 	getNetworkInfo: getNetworkInfo,
 	getNetTotals: getNetTotals,
-	getMempoolInfo: getMempoolInfo,
-	getMempoolTxids: getMempoolTxids,
+	getTxpoolInfo: getTxpoolInfo,
+	getTxpoolTxids: getTxpoolTxids,
 	getMiningInfo: getMiningInfo,
 	getBlockHash: getBlockHash,
 	getBlock: getBlock,
 	getBlockTemplate: getBlockTemplate,
 	getRawTransaction: getRawTransaction,
 	getUtxo: getUtxo,
-	getMempoolTxDetails: getMempoolTxDetails,
-	getRawMempool: getRawMempool,
+	getTxpoolTxDetails: getTxpoolTxDetails,
+	getRawTxpool: getRawTxpool,
 	getUptimeSeconds: getUptimeSeconds,
 	getHelp: getHelp,
 	getRpcMethodHelp: getRpcMethodHelp,
@@ -452,7 +444,5 @@ module.exports = {
 	getBlockStats: getBlockStats,
 	getBlockHeader: getBlockHeader,
 	decodeScript: decodeScript,
-	decodeRawTransaction: decodeRawTransaction,
-
-	minRpcVersions: minRpcVersions
+	decodeRawTransaction: decodeRawTransaction
 };
