@@ -40,7 +40,7 @@ var pug = require("pug");
 var momentDurationFormat = require("moment-duration-format");
 var coreApi = require("./app/api/coreApi.js");
 var coins = require("./app/coins.js");
-var request = require("request");
+var axios = require("axios");
 var qrcode = require("qrcode");
 var addressApi = require("./app/api/addressApi.js");
 var electrumAddressApi = require("./app/api/electrumAddressApi.js");
@@ -126,24 +126,20 @@ function loadMiningPoolConfigs() {
 	});
 }
 
-function getSourcecodeProjectMetadata() {
+async function getSourcecodeProjectMetadata() {
 	var options = {
 		url: "https://api.github.com/repos/sickpig/bch-rpc-explorer",
 		headers: {
-			'User-Agent': 'request'
+			'User-Agent': 'axios'
 		}
 	};
 
-	request(options, function(error, response, body) {
-		if (error == null && response && response.statusCode && response.statusCode == 200) {
-			var responseBody = JSON.parse(body);
-
-			global.sourcecodeProjectMetadata = responseBody;
-
-		} else {
-			utils.logError("3208fh3ew7eghfg", {error:error, response:response, body:body});
-		}
-	});
+	try {
+		const response = await axios(options);
+		global.sourcecodeProjectMetadata = response.data;
+	} catch(err) {
+			utils.logError("3208fh3ew7eghfg", err);
+	}
 }
 
 function loadChangelog() {
