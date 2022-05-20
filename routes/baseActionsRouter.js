@@ -13,7 +13,6 @@ var cashaddrjs = require('cashaddrjs');
 var sha256 = require("crypto-js/sha256");
 var hexEnc = require("crypto-js/enc-hex");
 var Decimal = require("decimal.js");
-var marked = require("marked");
 var semver = require("semver");
 
 var utils = require('./../app/utils.js');
@@ -1624,7 +1623,7 @@ router.get("/admin", function(req, res, next) {
 
 
 router.get("/changelog", function(req, res, next) {
-	res.locals.changelogHtml = marked(global.changelogMarkdown);
+	res.locals.changelogHtml = res.locals.markdown(global.changelogMarkdown);
 
 	res.render("changelog");
 
