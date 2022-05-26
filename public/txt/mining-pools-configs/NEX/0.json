@@ -1,13 +1,13 @@
 {
     "coinbase_tags" : {
-        "match string": {
-            "name": "name",
-            "link": "url"
+        "mined from niftyart.cash": {
+            "name": "Niftyart",
+            "link": "http://niftyart.cash/"
         }
     },
     "payout_addresses" : {
-        "nexa:qrz7nferavt263h8v2nrm9zssnfrz34d8spzpd3axa": {
-            "name": "name",
+        "nexatest:nqtsq5g5qlysklhnme0zdpqvnu3fgf8ehpdp3uh80lfu9m30": {
+            "name": "Andrew's",
             "link": "url"
         }
 

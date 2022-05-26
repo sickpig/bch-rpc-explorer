@@ -26,7 +26,7 @@ block content
 		- DecimalRounded = Decimal.clone({ precision: 4, rounding: 2 })
 
 		- var totalInputValue = new Decimal(0);
-		if (result.getrawtransaction.vin[0].coinbase)
+		if (result.getrawtransaction.vin.length == 0)
 			- totalInputValue = totalInputValue.plus(new Decimal(coinConfig.blockRewardFunction(result.blockHeader.height, activeBlockchain)));
 		each txInput, txInputIndex in result.txInputs
 			if (txInput)
@@ -144,8 +144,8 @@ block content
 											a(data-toggle="tooltip", title="6 confirmations is generally considered 'settled'. High-value transactions may require more; low-value transactions may require less.")
 												i.fas.fa-lock
 
-
-						if (result.getrawtransaction.vin[0].coinbase)
+						//only coinbase have 0 inputs
+						if (result.getrawtransaction.vin.length == 0)
 							div.row
 								div.summary-table-label Fees Collected
 								div.summary-table-content.text-monospace
@@ -247,19 +247,21 @@ block content
 
 
 
-				if (result.getrawtransaction.vin[0].coinbase)
+				if (result.getrawtransaction.vin.length == 0)
 					div.card.shadow-sm.mb-3
 						div.card-body.px-2.px-md-3
 							h2.h6.mb-0 Coinbase
 							hr
 
 							h6 Hex
+							- var findex = result.getrawtransaction.vout.length -1
 							div.bg-light.px-2.py-2.mb-3.border
-								span.text-monospace.word-wrap #{result.getrawtransaction.vin[0].coinbase}
+								span.text-monospace.word-wrap #{result.getrawtransaction.vout[findex].scriptPubKey.hex}
 
 							h6 Decoded
+							- var minerCustomData = utils.getMinerCustomData(result.getrawtransaction);
 							div.bg-light.px-2.py-2.border
-								span.text-monospace.word-wrap #{utils.hex2string(result.getrawtransaction.vin[0].coinbase)}
+								span.text-monospace.word-wrap #{utils.hex2string(result.getrawtransaction.vout[findex].scriptPubKey.hex)}
 
 				div.card.shadow-sm.mb-3
 					div.card-body.px-2.px-md-3

@@ -366,13 +366,21 @@ function logMemoryUsage() {
 
 var possibleMinerSignalRE = /\/(.*)\//;
 
+function getMinerCustomData(tx) {
+	if (tx == null || tx.vin.length >=1 ) {
+		return null;
+	}
+	var customData = tx.vout[tx.vout.length - 1].scriptPubKey.asm.split(" ").splice(2).join(" ");
+	return customData
+}
+
 function getMinerFromCoinbaseTx(tx) {
-	if (tx == null || tx.vin == null || tx.vin.length == 0) {
+	if (tx == null || tx.vin.length >=1 ) {
 		return null;
 	}
 
 	var minerInfo = {
-		coinbaseStr: hex2string(tx.vin[0].coinbase)
+		coinbaseStr: hex2string(getMinerCustomData(tx))
 	};
 
 	var possibleSignal = minerInfo.coinbaseStr.match(possibleMinerSignalRE);
@@ -874,6 +882,7 @@ module.exports = {
 	seededRandomIntBetween: seededRandomIntBetween,
 	logMemoryUsage: logMemoryUsage,
 	getMinerFromCoinbaseTx: getMinerFromCoinbaseTx,
+	getMinerCustomData: getMinerCustomData,
 	getBlockTotalFeesFromCoinbaseTxAndBlockHeight: getBlockTotalFeesFromCoinbaseTxAndBlockHeight,
 	refreshExchangeRates: refreshExchangeRates,
 	parseExponentStringDouble: parseExponentStringDouble,
