@@ -1,12 +1,12 @@
 {
-  "name": "bch-rpc-explorer",
-  "version": "0.0.8",
+  "name": "nex-rpc-explorer",
+  "version": "1.0.0",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
-      "name": "bch-rpc-explorer",
-      "version": "0.0.8",
+      "name": "nex-rpc-explorer",
+      "version": "1.0.0",
       "license": "MIT",
       "dependencies": {
         "async": "^3.2.2",
@@ -17,7 +17,6 @@
         "bitcoinjs-lib": "^5.2.0",
         "bluebird": "^3.7.2",
         "body-parser": "^1.19.0",
-        "cashaddrjs": "^0.3.12",
         "cookie-parser": "^1.4.5",
         "crypto-js": "^4.0.0",
         "csurf": "^1.11.0",
@@ -36,6 +35,7 @@
         "moment-duration-format": "^2.3.2",
         "morgan": "^1.10.0",
         "msgpack-lite": "^0.1.26",
+        "nexaaddrjs": "^1.1.1",
         "node-addon-api": "^3.0.2",
         "pug": "^3.0.2",
         "qrcode": "^1.4.4",
@@ -47,7 +47,7 @@
         "text-decoding": "^1.0.0"
       },
       "bin": {
-        "bch-rpc-explorer": "bin/cli.js"
+        "nex-rpc-explorer": "bin/cli.js"
       },
       "devDependencies": {
         "less": "3.9.0",
@@ -591,14 +591,6 @@
       "version": "0.12.0",
       "resolved": "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz",
       "integrity": "sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw=="
-    },
-    "node_modules/cashaddrjs": {
-      "version": "0.3.12",
-      "resolved": "https://registry.npmjs.org/cashaddrjs/-/cashaddrjs-0.3.12.tgz",
-      "integrity": "sha512-GdjCYMVwd86HXcFcxyEZQLPLFv8a/u0ccYPsO0PpnUW26LhZzHX9l9QA+DjaeUah7tnebwPs33NWDbbUy8iVYQ==",
-      "dependencies": {
-        "big-integer": "1.6.36"
-      }
     },
     "node_modules/chalk": {
       "version": "2.4.2",
@@ -2613,6 +2605,14 @@
       "integrity": "sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==",
       "engines": {
         "node": ">= 0.6"
+      }
+    },
+    "node_modules/nexaaddrjs": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/nexaaddrjs/-/nexaaddrjs-1.1.1.tgz",
+      "integrity": "sha512-gdbMOipki3QDJtJh8D+j5FZDU2+YoJ269IcKPnlMmy7p1WwbNzPVnmBw7H9Se+sKaPKF7iRSifzbUZvtKawxeA==",
+      "dependencies": {
+        "big-integer": "1.6.36"
       }
     },
     "node_modules/nice-try": {
@@ -4663,14 +4663,6 @@
       "resolved": "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz",
       "integrity": "sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw=="
     },
-    "cashaddrjs": {
-      "version": "0.3.12",
-      "resolved": "https://registry.npmjs.org/cashaddrjs/-/cashaddrjs-0.3.12.tgz",
-      "integrity": "sha512-GdjCYMVwd86HXcFcxyEZQLPLFv8a/u0ccYPsO0PpnUW26LhZzHX9l9QA+DjaeUah7tnebwPs33NWDbbUy8iVYQ==",
-      "requires": {
-        "big-integer": "1.6.36"
-      }
-    },
     "chalk": {
       "version": "2.4.2",
       "resolved": "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz",
@@ -6203,6 +6195,14 @@
       "version": "0.6.3",
       "resolved": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz",
       "integrity": "sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg=="
+    },
+    "nexaaddrjs": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/nexaaddrjs/-/nexaaddrjs-1.1.1.tgz",
+      "integrity": "sha512-gdbMOipki3QDJtJh8D+j5FZDU2+YoJ269IcKPnlMmy7p1WwbNzPVnmBw7H9Se+sKaPKF7iRSifzbUZvtKawxeA==",
+      "requires": {
+        "big-integer": "1.6.36"
+      }
     },
     "nice-try": {
       "version": "1.0.5",

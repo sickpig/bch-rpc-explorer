@@ -9,7 +9,7 @@ var moment = require('moment');
 var bitcoinCore = require("bitcoin-core");
 var qrcode = require('qrcode');
 var bitcoinjs = require('bitcoinjs-lib');
-var cashaddrjs = require('cashaddrjs');
+var cashaddrjs = require('nexaaddrjs');
 var sha256 = require("crypto-js/sha256");
 var hexEnc = require("crypto-js/enc-hex");
 var Decimal = require("decimal.js");
@@ -1012,7 +1012,6 @@ router.get("/address/:address", function(req, res, next) {
 	res.locals.addressApiSupport = addressApi.getCurrentAddressApiFeatureSupport();
 
 	res.locals.result = {};
-
 	try {
 		res.locals.addressObj = bitcoinjs.address.fromBase58Check(address);
 
