@@ -25,17 +25,17 @@ block content
 					h4.alert-heading.h6.font-weight-bold !{coinConfig.nameHtml} Fun
 
 					p
-						span This looks like a miner payout address for  
-						span.font-weight-bold #{payoutAddressForMiner.name}
+						span This looks like a miner payout address for 
+						span.font-weight-bold  #{payoutAddressForMiner.name} 
 						if (coinConfig.miningPoolsConfigUrls.length > 1)
-							span (see the configurations:
+							span (see the configurations: 
 							each item, index in coinConfig.miningPoolsConfigUrls
 								if (index > 0)
 									span ,
 								a(href=item) config ##{index + 1}
 							span )
 						else
-							span (see the configuration
+							span (see the configuration 
 							a(href=coinConfig.miningPoolsConfigUrls[0]) here
 							span )
 
