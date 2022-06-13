@@ -1,6 +1,6 @@
 doctype html
 mixin title(title)
-	if (activeBlockchain != "main")
+	if (activeBlockchain != "nexa")
 		title [#{activeBlockchain.toUpperCase()}] - #{title}
 	else
 		title #{title}
@@ -59,7 +59,7 @@ html(lang="en")
 
 							if (activeBlockchain != "main")
 								li.nav-item
-									a.nav-link.text-warning(title=`Current node's chain: ${activeBlockchain}` data-toggle="tooltip") [#{activeBlockchain}net]
+									a.nav-link.text-warning(title=`Current node's chain: ${activeBlockchain}` data-toggle="tooltip") [#{activeBlockchain}]
 
 							if (config.siteTools)
 								li.nav-item.dropdown
