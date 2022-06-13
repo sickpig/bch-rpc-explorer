@@ -171,16 +171,16 @@ html(lang="en")
 						dl
 							dt Source
 							dd
-								a(href="https://github.com/sickpig/bch-rpc-explorer") github.com/sickpig/bch-rpc-explorer
+								a(href="https://gitlab.com/nexa/nex-rpc-explorer") https://gitlab.com/nexa/nexa.git
 
 								if (global.sourcecodeProjectMetadata)
 									div(class="mt-2")
-										a(href="https://github.com/sickpig/bch-rpc-explorer", class="btn btn-primary btn-sm mr-3 mb-1 text-decoration-none")
+										a(href="https://gitlab.com/nexa/nex-rpc-explorer", class="btn btn-primary btn-sm mr-3 mb-1 text-decoration-none")
 											i(class="fas fa-star mr-2")
 											span(class="mr-2") Star
 											span(class="badge bg-white text-dark") #{global.sourcecodeProjectMetadata.stargazers_count}
 
-										a(href="https://github.com/sickpig/bch-rpc-explorer/fork", class="btn btn-primary btn-sm mr-3 mb-1 text-decoration-none")
+										a(href="https://gitlab.com/nexa/nex-rpc-explorer/fork", class="btn btn-primary btn-sm mr-3 mb-1 text-decoration-none")
 											i(class="fas fa-code-branch mr-2")
 											span(class="mr-2") Fork
 											span(class="badge bg-white text-dark") #{global.sourcecodeProjectMetadata.forks_count}
@@ -194,7 +194,7 @@ html(lang="en")
 									br
 									// the following is not a trailing spaces
 									span commit: 
-										a(href=("https://github.com/sickpig/bch-rpc-explorer/commit/" + sourcecodeVersion)) #{sourcecodeVersion}
+										a(href=("https://gitlab.com/nexa/nex-rpc-explorer/commit/" + sourcecodeVersion)) #{sourcecodeVersion}
 
 								br
 								span released: #{sourcecodeDate}

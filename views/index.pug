@@ -17,21 +17,21 @@ block content
 				span
 					span.font-weight-bold #{coinConfig.siteTitlesByNetwork[activeBlockchain]}
 					span  is 
-					a(href="https://github.com/sickpig/bch-rpc-explorer", target="_blank") open-source
+					a(href="https://gitlab.com/nexa/nex-rpc-explorer", target="_blank") open-source
 					span  and easy to set up. It can communicate with your 
 					a(href=coinConfig.nodeUrl, target="_blank") #{coinConfig.name} Full Node
 					span  via RPC. See the 
-					a(href="https://github.com/sickpig/bch-rpc-explorer", target="_blank") project description
+					a(href="https://gitlab.com/nexa/nex-rpc-explorer", target="_blank") project description
 					span  for a list of features and instructions for running.
 
 				if (global.sourcecodeProjectMetadata)
 					div.mt-2
-						a.btn.btn-primary.btn-sm.mr-3.mb-1(href="https://github.com/sickpig/bch-rpc-explorer")
+						a.btn.btn-primary.btn-sm.mr-3.mb-1(href="https://gitlab.com/nexa/nex-rpc-explorer")
 							i.fas.fa-star.mr-2
 							span.mr-2 Star 
 							span.badge.bg-white.text-dark #{global.sourcecodeProjectMetadata.stargazers_count}
 
-						a.btn.btn-primary.btn-sm.mr-3.mb-1(href="https://github.com/sickpig/bch-rpc-explorer/fork")
+						a.btn.btn-primary.btn-sm.mr-3.mb-1(href="https://gitlab.com/nexa/nex-rpc-explorer/fork")
 							i.fas.fa-code-branch.mr-2
 							span.mr-2 Fork 
 							span.badge.bg-white.text-dark #{global.sourcecodeProjectMetadata.forks_count}

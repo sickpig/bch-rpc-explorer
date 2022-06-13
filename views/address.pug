@@ -245,7 +245,7 @@ block content
 
 							if (addressApiError && addressApiError.error && addressApiError.error.code && addressApiError.error.code == -32600)
 								span Failed to retrieve transaction history from ElectrumX. See
-								a(href="https://github.com/sickpig/bch-rpc-explorer/issues/67") Issue #67
+								a(href="https://github.com/janoside/btc-rpc-explorer/issues/67") Issue #67
 								span for more information.
 
 
@@ -266,7 +266,7 @@ block content
 
 									else if (err == "No address API configured")
 										span No address API is configured. See
-										a(href="https://github.com/sickpig/bch-rpc-explorer/blob/master/.env-sample") the example configuration file
+										a(href="https://gitlab.com/nexa/nex-rpc-explorer/blob/master/.env-sample") the example configuration file
 										span for help setting up an address API if desired.
 									else
 										span.text-danger Error retrieving transaction history (##{errIndex + 1})
