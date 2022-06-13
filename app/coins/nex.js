@@ -69,9 +69,7 @@ module.exports = {
 	nodeTitle:"Nexa Full Node",
 	nodeUrl:"https://nexa.org/download",
 	demoSiteUrl: "https://explorer.nexa.org",
-	miningPoolsConfigUrls:[
-		"https://raw.githubusercontent.com/btccom/Blockchain-Known-Pools/master/pools.json",
-	],
+	miningPoolsConfigUrls:["https://nexa.org"],
 	maxBlockSizeByNetwork: {
 		"main":   32000000,
 		"test":   32000000,
