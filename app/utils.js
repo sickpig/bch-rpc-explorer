@@ -780,11 +780,8 @@ function buildQrCodeUrl(str, results) {
 
 function outputTypeAbbreviation(outputType) {
 	var map = {
-		"pubkey": "p2pk",
 		"pubkeyhash": "p2pkh",
-		"scripthash": "p2sh",
-		"witness_v0_keyhash": "v0_p2wpkh",
-		"witness_v0_scripthash": "v0_p2wsh",
+		"scripttemplate": "p2st",
 		"nonstandard": "nonstandard",
 		"nulldata": "nulldata"
 	};
@@ -822,11 +819,8 @@ function prettyScript(inScript, indentChar) {
 
 function outputTypeName(outputType) {
 	var map = {
-		"pubkey": "Pay to Public Key",
 		"pubkeyhash": "Pay to Public Key Hash",
-		"scripthash": "Pay to Script Hash",
-		"witness_v0_keyhash": "Witness, v0 Key Hash",
-		"witness_v0_scripthash": "Witness, v0 Script Hash",
+		"scripttemplate": "Pay to Script Template",
 		"nonstandard": "Non-Standard",
 		"nulldata": "Null Data"
 	};
