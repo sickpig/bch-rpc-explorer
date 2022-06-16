@@ -1616,15 +1616,6 @@ router.get("/admin", function(req, res, next) {
 	utils.perfMeasure(req);
 });
 
-
-router.get("/changelog", function(req, res, next) {
-	res.locals.changelogHtml = res.locals.markdown(global.changelogMarkdown);
-
-	res.render("changelog");
-
-	utils.perfMeasure(req);
-});
-
 router.get("/fun", function(req, res, next) {
 	var sortedList = coins[config.coin].historicalData;
 	sortedList.sort(function(a, b) {
