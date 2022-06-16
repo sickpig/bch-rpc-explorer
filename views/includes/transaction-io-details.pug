@@ -18,13 +18,13 @@ div.row.text-monospace
 		if (txInputs)
 			- var extraInputCount = 0;
 			each txVin, txVinIndex in tx.vin
-				if (!txVin.coinbase)
+				if (tx.vin.length > 0)
 					- var vout = null;
 					if (txInputs && txInputs[txVinIndex])
 						- var txInput = txInputs[txVinIndex];
 						- var vout = txInput;
 
-				if (txVin.coinbase || vout)
+				if (tx.vin.length == 0 || vout)
 					div.clearfix
 						div.tx-io-label
 							a(data-toggle="tooltip", title=("Input #" + txVinIndex.toLocaleString()), style="white-space: nowrap;")
@@ -42,7 +42,7 @@ div.row.text-monospace
 						div.tx-io-content
 							div.clearfix
 								div.tx-io-desc
-									if (txVin.coinbase)
+									if (tx.vin.length == 0)
 										small.data-tag.bg-success.mr-2(title="Coinbase transactions are special transactions created by the miner of a block. They distribute the block reward (subsidy) as the miner chooses, along with all of the fees paid by transactions included in the block.", data-toggle="tooltip") coinbase
 
 										div.pt-1

@@ -10,7 +10,7 @@ block content
 	div.card.shadow-sm.mb-3
 		div.card-body
 			p Below is a list of fun/interesting things in the !{coinConfig.nameHtml} blockchain. Some are historical firsts, others are just fun or cool.
-			
+
 			div.table-responsive
 				table.table.table-striped
 					thead
@@ -26,7 +26,7 @@ block content
 									td.data-cell #{item.date}
 
 									td.data-cell #{item.summary}
-									
+
 									td.data-cell.text-monospace
 										if (item.type == "tx")
 											a(href=("/tx/" + item.txid), title=item.txid, data-toggle="tooltip") Tx #{item.txid.substring(0, 23)}...

@@ -23,10 +23,10 @@ if (currencyValue > 0)
 			small.ml-1 #{parts.currencyUnit}#{currencyUnitSuffix}
 
 	else if (currencyFormatInfo.type == "exchanged" && currencyFormatInfo.isExtendedRate)
-		small.border-dotted.ml-1(data-toggle="tooltip", title=`${utils.formatCurrencyAmount(currencyValue, coinConfig.defaultCurrencyUnit.name).simpleVal} BCH  - Notice the rate is being calculated using the value of BCH in USD multiplied by the value of USD in ${parts.currencyUnit}`) #{parts.currencyUnit}
+		small.border-dotted.ml-1(data-toggle="tooltip", title=`${utils.formatCurrencyAmount(currencyValue, coinConfig.defaultCurrencyUnit.name).simpleVal} NEX  - Notice the rate is being calculated using the value of NEX in USD multiplied by the value of USD in ${parts.currencyUnit}`) #{parts.currencyUnit}
 
 	else if (currencyFormatInfo.type == "exchanged")
-		small.border-dotted.ml-1(data-toggle="tooltip", title=`${utils.formatCurrencyAmount(currencyValue, coinConfig.defaultCurrencyUnit.name).simpleVal} BCH`) #{parts.currencyUnit}
+		small.border-dotted.ml-1(data-toggle="tooltip", title=`${utils.formatCurrencyAmount(currencyValue, coinConfig.defaultCurrencyUnit.name).simpleVal} NEX`) #{parts.currencyUnit}
 
 else
 	span.text-monospace 0

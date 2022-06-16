@@ -307,8 +307,26 @@ module.exports = {
 	},
 	genesisCoinbaseOutputAddressScripthash:"8b01df4e368ea28f8dc0423bcf7a4923e3a12d307c875e47a0cfbf90b5c39161",
 	historicalData: [
-		{},
-		{},
+		{
+			type: "blockheight",
+			date: "2022-04-14",
+			chain: "testnet",
+			blockHeight: 0,
+			blockHash: "508c843a4b98fb25f57cf9ebafb245a5c16468f06519cdd467059a91e7b79d52",
+			summary: "Nexa Test Genesis Block.",
+			alertBodyHtml: "This is the first block in the Nexa testnet blockchain, known as the 'Genesis Block'",
+			referenceUrl: "https://nexa.org"
+		},
+		{
+			type: "placeholder",
+			date: "2022-04-14",
+			chain: "testnet",
+			blockHeight: 0,
+			blockHash: "508c843a4b98fb25f57cf9ebafb245a5c16468f06519cdd467059a91e7b79d52",
+			summary: "Place Holding.",
+			alertBodyHtml: "or was it hodling? :P",
+			referenceUrl: "https://nexa.org"
+		}
 	],
 	exchangeRateData:{
 		// see https://www.kraken.com/features/api#get-ticker-info for doc on that API
