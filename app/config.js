@@ -179,10 +179,10 @@ module.exports = {
       showToolsSubheader:(process.env.NEXEXP_UI_SHOW_TOOLS_SUBHEADER == "true"),
       dropdowns:[
         {
-          title:"Related Sites",
+          title:"Choose your network",
           links:[
-            {name: "Bitcoin Unlimited", url:"https://bitcoinunlimited.info", imgUrl:"/img/logo/bu.png"},
-            {name: "Nexa", url:"https://nexa.org", imgUrl:"/img/logo/nex.svg"},
+            {name: "Testnet", url:"https://testnet-nexa-explorer.bitcoinunlimited.info", imgUrl:"/img/logo/nex.svg"},
+            {name: "Nexa", url:"https://explorer.nexa.org", imgUrl:"/img/logo/nex.svg"},
           ]
         }
       ]
