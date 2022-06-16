@@ -22,7 +22,7 @@ var coreApi = require("./../app/api/coreApi.js");
 var addressApi = require("./../app/api/addressApi.js");
 var rpcApi = require("./../app/api/rpcApi.js");
 
-const bch = require('bindings')('bch');
+const nex = require('bindings')('nex');
 
 const v8 = require('v8');
 
@@ -120,7 +120,7 @@ router.get("/", function(req, res, next) {
 
 			if (promiseResults[5]) {
 				res.locals.blockTemplate = promiseResults[5];
-				res.locals.realDifficulty = bch.GetDifficulty(parseInt(promiseResults[5].bits, 16));
+				res.locals.realDifficulty = nex.GetDifficulty(parseInt(promiseResults[5].bits, 16));
 			}
 
 			res.locals.difficultyPeriodFirstBlockHeader = promiseResults[6];

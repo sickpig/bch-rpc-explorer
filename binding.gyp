@@ -1,9 +1,9 @@
 {
   "targets": [
     {
-      "target_name": "bch",
+      "target_name": "nex",
       "sources": [
-        "bch-diff.cpp"
+        "nex-diff.cpp"
       ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")"
