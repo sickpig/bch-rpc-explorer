@@ -12,7 +12,6 @@ var bitcoinjs = require('bitcoinjs-lib');
 var sha256 = require("crypto-js/sha256");
 var hexEnc = require("crypto-js/enc-hex");
 var Decimal = require("decimal.js");
-var marked = require("marked");
 
 var utils = require('./../app/utils.js');
 var coins = require("./../app/coins.js");
@@ -21,10 +20,6 @@ var coreApi = require("./../app/api/coreApi.js");
 var addressApi = require("./../app/api/addressApi.js");
 
 const forceCsrf = csurf({ ignoreMethods: [] });
-
-
-
-
 
 router.get("/mempoolinfo", function(req, res, next) {
 	coreApi.getMempoolInfo().then(function(info) {

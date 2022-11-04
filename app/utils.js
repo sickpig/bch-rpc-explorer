@@ -6,7 +6,7 @@ var debugErrorVerboseLog = debug("bchexp:errorVerbose");
 var debugPerfLog = debug("bchexp:actionPerformace");
 
 var Decimal = require("decimal.js");
-var request = require("request");
+var axios = require("axios");
 var qrcode = require("qrcode");
 var textdecoding = require("text-decoding");
 
@@ -476,65 +476,62 @@ function getBlockTotalFeesFromCoinbaseTxAndBlockHeight(coinbaseTx, blockHeight) 
 	return totalOutput.minus(new Decimal(blockReward));
 }
 
-function refreshExchangeRates() {
+async function refreshExchangeRates() {
 	if (!config.queryExchangeRates || config.privacyMode) {
 		return;
 	}
 
 	if (coins[config.coin].exchangeRateData) {
-		request(coins[config.coin].exchangeRateData.jsonUrl, function(error, response, body) {
-			if (error == null && response && response.statusCode && response.statusCode == 200) {
-				var responseBody = JSON.parse(body);
+		try {
+			const response = await axios.get(coins[config.coin].exchangeRateData.jsonUrl);
 
-				var exchangeRates = coins[config.coin].exchangeRateData.responseBodySelectorFunction(responseBody);
-				if (exchangeRates != null) {
-					global.exchangeRates = exchangeRates;
-					global.exchangeRatesUpdateTime = new Date();
+			var exchangeRates = coins[config.coin].exchangeRateData.responseBodySelectorFunction(response.data);
+			if (exchangeRates != null) {
+				global.exchangeRates = exchangeRates;
+				global.exchangeRatesUpdateTime = new Date();
 
-					debugLog("Using exchange rates: " + JSON.stringify(global.exchangeRates) + " starting at " + global.exchangeRatesUpdateTime);
+				debugLog("Using exchange rates: " + JSON.stringify(global.exchangeRates) + " starting at " + global.exchangeRatesUpdateTime);
 					getExchangeFromExchangeRateExtensions();
-				} else {
-					debugLog("Unable to get exchange rate data");
-				}
 			} else {
-				logError("39r7h2390fgewfgds", {error:error, response:response, body:body});
+				debugLog("Unable to get exchange rate data");
 			}
-		});
+		} catch(err) {
+			logError("39r7h2390fgewfgds", err);
+		}
 	}
 }
 
-function getExchangeFromExchangeRateExtensions() {
+async function getExchangeFromExchangeRateExtensions() {
 	// Any other extended currency conversion must use the BCHUSD base conversion rate to be calculated, in consecuence --no-rates must be disabled.
 	var anyExtensionIsActive = coins[config.coin].currencyUnits.find(cu => cu.isExtendedRate) != undefined;
 	if (anyExtensionIsActive && coins[config.coin].exchangeRateDataExtension.length > 0 && global.exchangeRates['usd']) {
-		coins[config.coin].exchangeRateDataExtension.forEach(exchangeProvider => {
-			request(exchangeProvider.jsonUrl, function(error, response, body) {
-				if (error == null && response && response.statusCode && response.statusCode == 200) {
-					var responseBody = JSON.parse(body);
-	
-					var exchangeRates = exchangeProvider.responseBodySelectorFunction(responseBody);
-					if (exchangeRates != null || Object.entries(exchangeRates).length > 0) {
-						var originalExchangeRates = global.exchangeRates;
-						var extendedExchangeRates =  {};
-						for (const  key in exchangeRates) {
-							extendedExchangeRates[key] = (parseFloat(originalExchangeRates.usd) * parseFloat(exchangeRates[key])).toString();
-						}
-						global.exchangeRates = {
-							...originalExchangeRates,
-							...extendedExchangeRates
-						}
-						global.exchangeRatesUpdateTime = new Date();
-	
-						debugLog("Using extended exchange rates: " + JSON.stringify(global.exchangeRates) + " starting at " + global.exchangeRatesUpdateTime);
-	
-					} else {
-						debugLog("Unable to get extended exchange rate data");
+		for (const exchangeProvider of coins[config.coin].exchangeRateDataExtension) {
+			try {
+				const response = await axios.get(exchangeProvider.jsonUrl);
+				var responseBody = response.data;
+
+				var exchangeRates = exchangeProvider.responseBodySelectorFunction(responseBody);
+				if (exchangeRates != null || Object.entries(exchangeRates).length > 0) {
+					var originalExchangeRates = global.exchangeRates;
+					var extendedExchangeRates =  {};
+					for (const  key in exchangeRates) {
+						extendedExchangeRates[key] = (parseFloat(originalExchangeRates.usd) * parseFloat(exchangeRates[key])).toString();
 					}
+					global.exchangeRates = {
+						...originalExchangeRates,
+						...extendedExchangeRates
+					}
+					global.exchangeRatesUpdateTime = new Date();
+
+					debugLog("Using extended exchange rates: " + JSON.stringify(global.exchangeRates) + " starting at " + global.exchangeRatesUpdateTime);
+
 				} else {
-					logError("83ms2hsnw2je34zc2", {error:error, response:response, body:body});
+					debugLog("Unable to get extended exchange rate data");
 				}
-			});
-		});
+			} catch(err) {
+				logError("83ms2hsnw2je34zc2", err);
+			}
+		}
 	}
 }
 
@@ -554,47 +551,38 @@ function geoLocateIpAddresses(ipAddresses, provider) {
 			var ipStr = ipAddresses[i];
 
 			promises.push(new Promise(function(resolve2, reject2) {
-				ipCache.get(ipStr).then(function(result) {
+				ipCache.get(ipStr).then(async function(result) {
 					if (result.value == null) {
 						var apiUrl = "http://api.ipstack.com/" + result.key + "?access_key=" + config.credentials.ipStackComApiAccessKey;
 
-						debugLog("Requesting IP-geo: " + apiUrl);
-
-						request(apiUrl, function(error, response, body) {
-							if (error) {
-								reject2(error);
-
+						try {
+							const response = await axios.get(apiUrl);
+							var ip = response.data.ip;
+							ipDetails.detailsByIp[ip] = response.data;
+							if (response.data.latitude && response.data.longitude) {
+								debugLog(`Successful IP-geo-lookup: ${ip} -> (${response.data.latitude}, ${response.data.longitude})`);
 							} else {
-								resolve2({needToProcess:true, response:response});
+								debugLog(`Unknown location for IP-geo-lookup: ${ip}`);
 							}
-						});
-
+							ipCache.set(ip, response.data, 1000 * 60 * 60 * 24 * 365);
+							resolve2();
+						} catch(err) {
+							debugLog("Failed IP-geo-lookup: " + result.key);
+							logError("39724gdge33a", error, {ip: result.key});
+							// we failed to get what we wanted, but there's no meaningful recourse,
+							// so we log the failure and continue without objection
+							resolve2();
+						}
 					} else {
-						ipDetails.detailsByIp[result.key] = result.value;
-
-						resolve2({needToProcess:false});
+						ipDetails.detailsByIp[result.key] = result.value
+						resolve2();
 					}
 				});
 			}));
 		}
 
 		Promise.all(promises).then(function(results) {
-			for (var i = 0; i < results.length; i++) {
-				if (results[i].needToProcess) {
-					var res = results[i].response;
-					if (res != null && res["statusCode"] == 200) {
-						var resBody = JSON.parse(res["body"]);
-						var ip = resBody["ip"];
-
-						ipDetails.detailsByIp[ip] = resBody;
-
-						ipCache.set(ip, resBody, 1000 * 60 * 60 * 24 * 365);
-					}
-				}
-			}
-
 			resolve(ipDetails);
-
 		}).catch(function(err) {
 			logError("80342hrf78wgehdf07gds", err);
 
