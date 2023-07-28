@@ -167,7 +167,8 @@ block content
 									div.row
 										div.summary-split-table-label QR Code
 										div.summary-split-table-content.text-monospace
-											img(src=addressQrCodeUrl, alt=address, style="border: solid 1px #ccc;")
+											a(href=address)
+												img(src=addressQrCodeUrl, alt=address, style="border: solid 1px #ccc;")
 
 								div.col-md-6
 									if (electrumScripthash)
