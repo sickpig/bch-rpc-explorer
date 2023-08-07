@@ -186,7 +186,7 @@ module.exports = {
             {name: "Bitcoin Cash Nodes", url:"https://cashnodes.io", imgUrl:"/img/logo/bch.svg"},
             {name: "BCH PoW Monitoring", url:"https://fork.lol", imgUrl:"/img/logo/fork.png"},
             {name: "BCH Specification", url:"https://reference.cash", imgUrl:"/img/logo/refcash.ico"},
-            {name: "Bitcoin Cash Node", url:"https://www.bitcoincashnode.org/", imgUrl:"/img/logo/bchn.png"},
+            {name: "Bitcoin Cash Node", url:"https://bitcoincashnode.org/", imgUrl:"/img/logo/bchn.png"},
           ]
         }
       ]
