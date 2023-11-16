@@ -161,6 +161,13 @@ div.tab-content
 										- var bSizeK = result.getblock.size / 1000
 										span(style="") #{bSizeK.toLocaleString()} 
 											small KB
+										- var blockSizeLimit = Decimal(result.getblock.ablastate === undefined ? coinConfig.maxBlockSizeByNetwork[activeBlockchain] : result.getblock.ablastate.blocksizelimit);
+										- var fullRatio = Decimal(result.getblock.size).div(blockSizeLimit);
+										- var fullPercent = fullRatio.times(100).toDecimalPlaces(1);
+										- var toolTip = `Limit: ${blockSizeLimit.div(1000).toDecimalPlaces(4)} KB`;
+										span(title=toolTip, data-toggle="tooltip") &nbsp;
+											span.border-dotted #{fullPercent}%
+											small &nbsp;Full
 
 							if (result.getblock.miner)
 								div.row

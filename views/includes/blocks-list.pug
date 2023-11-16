@@ -110,13 +110,14 @@ div.table-responsive
 						
 					
 					td.data-cell.text-monospace.text-right
-						- var data = utils.formatLargeNumber(block.size, 1);
-						- var fullRatio = block.size / coinConfig.maxBlockSizeByNetwork[activeBlockchain];
-						- var full = new Decimal(100 * fullRatio).toDecimalPlaces(1);
-						- var abbr = data[1].abbreviation || "";
-						- var toolTip = `${data[0]} ${abbr}B`;
+						- var blockSizeLimit = block.ablastate === undefined ? coinConfig.maxBlockSizeByNetwork[activeBlockchain] : block.ablastate.blocksizelimit;
+						- var fullRatio = Decimal(block.size).div(Decimal(blockSizeLimit));
+						- var fullPercent = fullRatio.times(100).toDecimalPlaces(1);
+						- var formattedSize = utils.formatLargeNumber(block.size, 4);
+						- var abbr = formattedSize[1].abbreviation || "";
+						- var toolTip = `${formattedSize[0]} ${abbr}B`;
 
-							span.border-dotted(title=toolTip, data-toggle="tooltip") #{full}%
+							span.border-dotted(title=toolTip, data-toggle="tooltip") #{fullPercent}%
 							span  
 							if (full > 90)
 								img(src="/img/block-fullness-3.png", style="width: 18px; height: 18px;")
