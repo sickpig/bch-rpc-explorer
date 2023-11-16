@@ -115,7 +115,7 @@ div.table-responsive
 						- var fullPercent = fullRatio.times(100).toDecimalPlaces(1);
 						- var formattedSize = utils.formatLargeNumber(block.size, 4);
 						- var abbr = formattedSize[1].abbreviation || "";
-						- var toolTip = `${formattedSize[0]} ${abbr}B`;
+						- var toolTip = `Size: ${formattedSize[0]} ${abbr}B`;
 
 							span.border-dotted(title=toolTip, data-toggle="tooltip") #{fullPercent}%
 							span  
