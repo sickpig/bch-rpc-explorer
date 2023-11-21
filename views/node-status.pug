@@ -11,8 +11,9 @@ block content
 		ul.nav.nav-tabs.mb-3
 			li.nav-item
 				a.nav-link.active(data-toggle="tab", href="#tab-details", role="tab") Details
-			li.nav-item
-				a.nav-link(data-toggle="tab", href="#tab-json", role="tab") JSON
+			if ((!config.hideIp))
+				li.nav-item
+					a.nav-link(data-toggle="tab", href="#tab-json", role="tab") JSON
 
 
 		div.tab-content
@@ -178,58 +179,59 @@ block content
 												span.text-muted.ml-3 (score: #{item.score.toLocaleString()})
 
 
-			div.tab-pane(id="tab-json", role="tabpanel")
+			if ((!config.hideIp))
+				div.tab-pane(id="tab-json", role="tabpanel")
 
-				ul.nav.nav-pills.mb-3
-					li.nav-item
-						a.nav-link.active(data-toggle="tab", href="#tab-getblockchaininfo", role="tab") getblockchaininfo
-					li.nav-item
-						a.nav-link(data-toggle="tab", href="#tab-getnettotals", role="tab") getnettotals
-					li.nav-item
-						a.nav-link(data-toggle="tab", href="#tab-getnetworkinfo", role="tab") getnetworkinfo
-					li.nav-item
-						a.nav-link(data-toggle="tab", href="#tab-getmempoolinfo", role="tab") getmempoolinfo
-				
-				div.tab-content
-					div.tab-pane.active(id="tab-getblockchaininfo", role="tabpanel")
-						div.card.shadow-sm.mb-3
-							div.card-body
-								h4.h6.mb-0 getblockchaininfo
-								hr
+					ul.nav.nav-pills.mb-3
+						li.nav-item
+							a.nav-link.active(data-toggle="tab", href="#tab-getblockchaininfo", role="tab") getblockchaininfo
+						li.nav-item
+							a.nav-link(data-toggle="tab", href="#tab-getnettotals", role="tab") getnettotals
+						li.nav-item
+							a.nav-link(data-toggle="tab", href="#tab-getnetworkinfo", role="tab") getnetworkinfo
+						li.nav-item
+							a.nav-link(data-toggle="tab", href="#tab-getmempoolinfo", role="tab") getmempoolinfo
 
-								div.highlight
-									pre
-										code.json.bg-light(data-lang="json") #{JSON.stringify(getblockchaininfo, null, 4)}
+					div.tab-content
+						div.tab-pane.active(id="tab-getblockchaininfo", role="tabpanel")
+							div.card.shadow-sm.mb-3
+								div.card-body
+									h4.h6.mb-0 getblockchaininfo
+									hr
 
-					div.tab-pane(id="tab-getnettotals", role="tabpanel")
-						div.card.shadow-sm.mb-3
-							div.card-body
-								h4.h6.mb-0 getnettotals
-								hr
+									div.highlight
+										pre
+											code.json.bg-light(data-lang="json") #{JSON.stringify(getblockchaininfo, null, 4)}
 
-								div.highlight
-									pre
-										code.json.bg-light(data-lang="json") #{JSON.stringify(getnettotals, null, 4)}
+						div.tab-pane(id="tab-getnettotals", role="tabpanel")
+							div.card.shadow-sm.mb-3
+								div.card-body
+									h4.h6.mb-0 getnettotals
+									hr
 
-					div.tab-pane(id="tab-getnetworkinfo", role="tabpanel")
-						div.card.shadow-sm.mb-3
-							div.card-body
-								h4.h6.mb-0 getnetworkinfo
-								hr
+									div.highlight
+										pre
+											code.json.bg-light(data-lang="json") #{JSON.stringify(getnettotals, null, 4)}
 
-								div.highlight
-									pre
-										code.json.bg-light(data-lang="json") #{JSON.stringify(getnetworkinfo, null, 4)}
+						div.tab-pane(id="tab-getnetworkinfo", role="tabpanel")
+							div.card.shadow-sm.mb-3
+								div.card-body
+									h4.h6.mb-0 getnetworkinfo
+									hr
 
-					div.tab-pane(id="tab-getmempoolinfo", role="tabpanel")
-						div.card.shadow-sm.mb-3
-							div.card-body
-								h4.h6.mb-0 getmempoolinfo
-								hr
+									div.highlight
+										pre
+											code.json.bg-light(data-lang="json") #{JSON.stringify(getnetworkinfo, null, 4)}
 
-								div.highlight
-									pre
-										code.json.bg-light(data-lang="json") #{JSON.stringify(getmempoolinfo, null, 4)}
+						div.tab-pane(id="tab-getmempoolinfo", role="tabpanel")
+							div.card.shadow-sm.mb-3
+								div.card-body
+									h4.h6.mb-0 getmempoolinfo
+									hr
+
+									div.highlight
+										pre
+											code.json.bg-light(data-lang="json") #{JSON.stringify(getmempoolinfo, null, 4)}
 
 block endOfBody
 	script.
