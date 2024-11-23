@@ -2,6 +2,7 @@ var debug = require("debug");
 var debugLog = debug("bchexp:router");
 
 var express = require('express');
+const rateLimit = require('express-rate-limit');
 var csurf = require('csurf');
 var router = express.Router();
 var util = require('util');
@@ -979,7 +980,15 @@ router.get("/tx/:transactionId", function(req, res, next) {
 	});
 });
 
-router.get("/address/:address", async (req, res) => {
+const addressLimiter = rateLimit({
+	       windowMs: 1 * 60 * 1000,
+	       max: 1,
+	       standardHeaders: true,
+	       legacyHeaders: false,
+});
+
+
+router.get("/address/:address", addressLimiter, async (req, res) => {
 	var limit = config.site.addressTxPageSize;
 	var offset = 0;
 	var sort = "desc";
