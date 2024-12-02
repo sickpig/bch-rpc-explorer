@@ -1,0 +1,3 @@
+id,auth_token_hash,prev_auth_token_hash,auth_token_seen,client_ip,user_agent,seen_at,rotated_at,created_at,updated_at
+14369,uimIU...,uimIU...,true,4.242.32.163,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Safari/605.1.15",2024-03-31 02:15:41 UTC,2024-03-31 02:15:40 UTC,2024-03-31 02:15:40 UTC,2024-03-31 02:15:40 UTC
+14293,1dwYg...,++3cX...,true,2600:100f:b130:4514:5033:2e68:cfb3:3edc,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/122 Version/13.0.3 Safari/605.1.15",2024-03-09 09:37:35 UTC,2024-03-09 09:37:35 UTC,2024-03-07 11:20:42 UTC,2024-03-07 11:20:42 UTC

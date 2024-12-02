@@ -1,0 +1,7 @@
+id,action,user_auth_token_id,client_ip,auth_token_hash,created_at,path,user_agent
+608394,generate,14369,4.242.32.163,uimIU...,2024-03-31 02:15:40 UTC,/session,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Safari/605.1.15"
+608395,seen token,14369,4.242.32.163,uimIU...,2024-03-31 02:15:41 UTC,/login,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Safari/605.1.15"
+607315,generate,14293,2601:1c2:780:9490:bc0f:4f61:a934:4913,++3cX...,2024-03-07 11:20:42 UTC,/u/activate-account/824386cb841da7ba616b2b6589f75b52,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/122 Version/13.0.3 Safari/605.1.15"
+607316,seen token,14293,2601:1c2:780:9490:bc0f:4f61:a934:4913,++3cX...,2024-03-07 11:20:45 UTC,/,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/122 Version/13.0.3 Safari/605.1.15"
+607387,rotate,14293,2600:100f:b130:4514:5033:2e68:cfb3:3edc,1dwYg...,2024-03-09 09:37:35 UTC,/manifest.webmanifest,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/122 Version/13.0.3 Safari/605.1.15"
+607388,seen token,14293,2600:100f:b130:4514:5033:2e68:cfb3:3edc,1dwYg...,2024-03-09 09:37:35 UTC,/letter_avatar_proxy/v4/letter/e/848f3c/75.png,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/122 Version/13.0.3 Safari/605.1.15"
