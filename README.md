@@ -80,9 +80,8 @@ See `bch-rpc-explorer --help` for the full list of CLI options.
 
 * [bitcoincash:pq6snv5fcx2fp6dlzg7s0m9zs8yqh74335tzvvfcmq](bitcoincash:pq6snv5fcx2fp6dlzg7s0m9zs8yqh74335tzvvfcmq)
 
-
 [npm-ver-img]: https://img.shields.io/npm/v/bch-rpc-explorer.svg?style=flat
 [npm-ver-url]: https://www.npmjs.com/package/bch-rpc-explorer
-[npm-dl-img]: http://img.shields.io/npm/dm/bch-rpc-explorer.svg?style=flat
+[npm-dl-img]: https://img.shields.io/npm/dm/bch-rpc-explorer.svg?style=flat
 [npm-dl-url]: https://npmcharts.com/compare/bch-rpc-explorer?minimal=true
 

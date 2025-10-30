@@ -783,3 +783,24 @@ module.exports = {
 		return eras[index];
 	}
 };
+
+var maxBlockSizeByNetwork = module.exports.maxBlockSizeByNetwork;
+var maxSupplyByNetwork = module.exports.maxSupplyByNetwork;
+var genesisBlockHashesByNetwork = module.exports.genesisBlockHashesByNetwork;
+var genesisCoinbaseTransactionIdsByNetwork = module.exports.genesisCoinbaseTransactionIdsByNetwork;
+var genesisCoinbaseTransactionsByNetwork = module.exports.genesisCoinbaseTransactionsByNetwork;
+var genesisBlockStatsByNetwork = module.exports.genesisBlockStatsByNetwork;
+var historicalData = module.exports.historicalData;
+
+maxBlockSizeByNetwork.temp = maxBlockSizeByNetwork.chip;
+maxSupplyByNetwork.temp = maxSupplyByNetwork.chip;
+genesisBlockHashesByNetwork.temp = genesisBlockHashesByNetwork.chip;
+genesisCoinbaseTransactionIdsByNetwork.temp = genesisCoinbaseTransactionIdsByNetwork.chip;
+genesisCoinbaseTransactionsByNetwork.temp = genesisCoinbaseTransactionsByNetwork.chip;
+genesisBlockStatsByNetwork.temp = genesisBlockStatsByNetwork.chip;
+
+historicalData.filter(function(item) {
+	return item.chain === "chip";
+}).forEach(function(item) {
+	historicalData.push(Object.assign({}, item, { chain: "temp" }));
+});

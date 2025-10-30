@@ -125,8 +125,55 @@ div.row.index-summary
 						span.border-dotted(data-toggle="tooltip", title=`hex: ${blockChainInfo.chainwork.replace(/^0+/, '')}`)
 							span #{chainworkData[0]}
 							small.px-2.px-lg-0.px-xl-2 x
-							span 10
-							sup #{chainworkData[1].exponent}
+								span 10
+								sup #{chainworkData[1].exponent}
+
+				if (blockChainInfo.upgrade_status)
+					- var upgradeStatus = blockChainInfo.upgrade_status;
+					- var activationMtp = Number(upgradeStatus.mempool_activation_mtp);
+					- var chainMedianTime = Number(blockChainInfo.mediantime);
+					- var activationMtpIso = activationMtp ? new Date(activationMtp * 1000).toISOString() : null;
+					- var chainMedianTimeIso = chainMedianTime ? new Date(chainMedianTime * 1000).toISOString() : null;
+					- var activationDeltaSeconds = activationMtp - chainMedianTime;
+					- var upgradeEtaText = null;
+					if (activationDeltaSeconds > 0)
+						if (activationDeltaSeconds >= 86400)
+							- var deltaDays = Math.round(activationDeltaSeconds / 86400);
+							- var dayLabel = deltaDays === 1 ? "day" : "days";
+							- upgradeEtaText = `${deltaDays} ${dayLabel}`;
+						else if (activationDeltaSeconds >= 3600)
+							- var deltaHours = Math.round(activationDeltaSeconds / 3600);
+							- var hourLabel = deltaHours === 1 ? "hour" : "hours";
+							- upgradeEtaText = `~${deltaHours} ${hourLabel}`;
+						else
+							- var deltaMinutes = Math.max(1, Math.round(activationDeltaSeconds / 60));
+							- var minuteLabel = deltaMinutes === 1 ? "minute" : "minutes";
+							- upgradeEtaText = `~${deltaMinutes} ${minuteLabel}`;
+					- var postActivationHeight = Number(upgradeStatus.block_postactivation_height).toLocaleString();
+					- var postActivationHash = upgradeStatus.block_postactivation_hash;
+					- var upgradeIsActive = upgradeStatus.mempool_activated === true;
+					- var postActivationTitle = `Postactivation block hash: ${postActivationHash}`;
+					tr
+						th.px-2.px-lg-0.px-xl-2
+							i.fas.fa-rocket.mr-1.summary-icon
+							span #{upgradeStatus.name.toString().replace(/\s*\([^)]*\)\s*$/, "").trim()}
+						td.text-right
+							if (upgradeIsActive)
+								if (upgradeStatus.mempool_activated === true && !postActivationHash)
+									span.text-monospace Active (
+										span.border-dotted(title="Postactivation transactions are now being accepted, and the next block will be validated using the upgraded consensus rules.", data-toggle="tooltip") pending
+									span )
+								else if (postActivationHash && postActivationHeight)
+									span.text-monospace
+										span Active (
+										a.border-dotted(href=`/block/${postActivationHash}`, title=postActivationTitle, data-toggle="tooltip") #{postActivationHeight}
+										span )
+								else
+									span.text-monospace Active
+							else if (upgradeEtaText)
+								span.text-monospace.border-dotted(title=`Activation\xa0MTP:\xa0${activationMtpIso}, Latest\xa0MTP:\xa0${chainMedianTimeIso}`, data-toggle="tooltip") #{upgradeEtaText}
+							else
+								span.text-muted ???
 
 				if (utxoSetSummary || utxoSetSummaryPending)
 					tr
@@ -220,4 +267,3 @@ div.row.index-summary
 								- var currencyValue = parseInt(networkVolume.d1.amt);
 								- var currencyValueDecimals = 0;
 								include ./value-display.pug
-

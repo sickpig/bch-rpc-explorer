@@ -25,7 +25,7 @@ var rpcApi = require("./../app/api/rpcApi.js");
 const bch = require('bindings')('bch');
 
 const v8 = require('v8');
-const { decodeBase58Address, decodeBech32, decodeCashAddress, instantiateSha256 } = require("@bitauth/libauth");
+const { decodeBase58Address, decodeBech32, decodeCashAddress, instantiateSha256 } = import("@bitauth/libauth");
 
 const forceCsrf = csurf({ ignoreMethods: [] });
 
