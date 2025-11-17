@@ -26,10 +26,10 @@ var rpcApi = require("./../app/api/rpcApi.js");
 const bch = require('bindings')('bch');
 
 const v8 = require('v8');
-const { decodeBase58Address, decodeCashAddress } = await import("@bitauth/libauth");
 const nodeSha256 = { hash: (input) =>
 	Uint8Array.from(crypto.createHash("sha256").update(Buffer.from(input)).digest()),
 };
+const libauthPromise = import("@bitauth/libauth");
 
 const forceCsrf = csurf({ ignoreMethods: [] });
 
@@ -1029,7 +1029,9 @@ router.get("/address/:address", addressLimiter, async (req, res) => {
 	res.locals.addressApiSupport = addressApi.getCurrentAddressApiFeatureSupport();
 	res.locals.result = {};
 
-	let decodedBase58Address = decodeBase58Address(nodeSha256, address);
+	const { decodeBase58Address, decodeCashAddress } = await libauthPromise;
+
+	let decodedBase58Address = decodeBase58Address(address, nodeSha256);
 	if (typeof decodedBase58Address !== "string") { // When error libauth return string
 		res.locals.addressObj = {
 			hash: decodedBase58Address.payload,
